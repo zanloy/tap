@@ -1,0 +1,9 @@
+- flash.each do |name, message|
+  - if name == 'notice'
+    div[class='alert alert-success fade in', role='alert']
+      a[href='#' data-dismiss='alert' class='close'] X
+      = message
+  - else
+    div[class='alert alert-danger fade in', role='alert']
+      a[href='#' data-dismiss='alert' class='close'] X
+      = message

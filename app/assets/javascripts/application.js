@@ -2,15 +2,26 @@
 // listed below.
 //
 // Any JavaScript/Coffee file within this directory, lib/assets/javascripts, vendor/assets/javascripts,
-// or any plugin's vendor/assets/javascripts directory can be referenced here using a relative path.
+// or vendor/assets/javascripts of plugins, if any, can be referenced here using a relative path.
 //
 // It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
 // compiled file.
 //
-// Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
+// Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery-ui
+//= autocomplete-rails
+//= require bootstrap-sprockets
 //= require turbolinks
 //= require_tree .
+
+$(document).on("page:load ready", function(){
+    $("input.datepicker").datepicker();
+});
+
+$(document).on("page:load ready", function() {
+  $('input.datetimepicker').datetimepicker({format: "Y-m-d H:i", formatDate: 'm/d/Y', formatTime:'g:i a'});
+});

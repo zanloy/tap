@@ -9,33 +9,24 @@ html
     body
       .container
         - if @current_user
-          nav.navbar role='navigation'
+          nav.navbar-default role='navigation'
             .container-fluid
               .navbar-header
-                a.navbar-brand[href='/']
-                  TaP
-              div
-                - if @current_user
-                  ul class='nav navbar-nav'
-                    li class="dropdown #{is_active? 'engineering_changes'}"
-                      = link_to "Changes", engineering_changes_path
-                      ul class='dropdown-menu'
-                        li #{link_to 'Add New Change', new_engineering_change_path}
-                    li class="#{is_active? 'environments'}" = link_to 'Environments', environments_path
-                    li class="#{is_active? 'servers'}" = link_to 'Servers', servers_path
-                    li class="#{is_active? 'tags'}"
-                      = link_to tags_path do
-                        ==> glyphicon :tag
-                        ' Tags
-                    li class="#{is_active? 'users'}"
-                      = link_to users_path do
-                        ==> glyphicon :user
-                        ' Users
-                    - if is_admin?
-                      li class="#{is_active? 'admin'}"
-                        = link_to admin_path do
-                          ==> glyphicon :king
-                          ' Admin
+                button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1"
+                  span class="sr-only" Toggle navigation
+                  span class="icon-bar"
+                  span class="icon-bar"
+                  span class="icon-bar"
+                a.navbar-brand[href='/'] TaP
+              .collapse.navbar-collapse id='navbar-collapse-1'
+                /- if @current_user
+                  /ul.nav.navbar-nav
+                    /li class="#{is_active? 'projects'}" = link_to 'Projects', projects_path
+                    /- if is_admin?
+                      /li class="#{is_active? 'admin'}"
+                        /= link_to admin_path do
+                          /==> glyphicon :king
+                          /' Admin
                 .nav.navbar-nav.navbar-right
                   p class='navbar-text'
                     | Signed in as #{link_to @current_user.name_or_email, user_path(@current_user), class: 'text-muted'}. &nbsp;
