@@ -12,6 +12,10 @@ class User < ActiveRecord::Base
   # Scopes
   scope :sorted, -> { order(:name) }
 
+  def role?(base_role)
+    ROLES.index(base_role.to_s) <= ROLES.index(role)
+  end
+
   def name_or_email
     if self.name.nil? || self.name.empty?
       return self.email

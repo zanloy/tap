@@ -26,6 +26,8 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'bcrypt', '~> 3.1.7'
 # User omniauth for google authentication
 gem 'omniauth-google-oauth2'
+# Read in environment from .env
+gem 'dotenv-rails'
 # Use foreman for process handling
 gem 'foreman'
 # Use Puma web server
