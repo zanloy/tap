@@ -16,7 +16,9 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
 @import "bootstrap/theme";
-//@import "jquery.datetimepicker";
+@import "bootstrap-social";
+@import "font-awesome-sprockets";
+@import "font-awesome";
 @import "*";
 
 .dropdown:hover .dropdown-menu {

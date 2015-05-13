@@ -36,6 +36,10 @@ gem 'puma'
 gem 'slim-rails'
 # Use bootstrap css (http://getbootstrap.com)
 gem 'bootstrap-sass', '~> 3.3.4'
+# Awesome font?
+gem 'font-awesome-sass'
+# Easy sign-in with social icons and buttons
+gem 'bootstrap-social-rails'
 # Use will_paginate for pagination helpers
 gem 'will_paginate', '~> 3.0.5'
 # Allow for delayed jobs

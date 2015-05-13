@@ -2,6 +2,7 @@ Rails.application.routes.draw do
 
   root 'home#index'
 
+  resources :projects, path: '/p'
   resources :users
 
   resources :sessions, only: [:login, :create, :destroy]

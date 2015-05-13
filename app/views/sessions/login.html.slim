@@ -1,3 +1,6 @@
 .row
   .col-md-12.align-center
-    = link_to image_tag('sign_in/Red-signin_Long_base_20dp.png'), 'auth/google_oauth2', id: 'sign_in'
+    .container-fluid
+      a.btn.btn-block.btn-social.btn-google href='auth/google_oauth2'
+        i.fa.fa-google
+        ' Sign in with Google
