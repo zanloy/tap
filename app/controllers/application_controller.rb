@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  before_filter :store_path, :require_login!
+  before_filter :store_path, :require_login!, :set_navbar_projects
 
   helper_method :is_admin?, :require_admin!, :is_active?
 
@@ -51,4 +51,8 @@ class ApplicationController < ActionController::Base
     session[:last_path] = request.env['PATH_INFO']
   end
 
+  def set_navbar_projects
+    @navbar_projects = Project.show_in_navbar
+  end
+  
 end

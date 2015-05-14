@@ -1,19 +1,15 @@
-h1 Listing projects
-
+h1
+  - if can? :manage, Project
+    .pull-right
+      = button_to 'Add New Project', new_project_path, { method: :get, class: 'btn btn-primary' }
+  ' TaP Projects
 table
   thead
     tr
-      th
-      th
-      th
-
+      th Name
+      th Owner
   tbody
-    - @projects.each do |project|
+    - for project in @projects
       tr
-        td = link_to 'Show', project
-        td = link_to 'Edit', edit_project_path(project)
-        td = link_to 'Destroy', project, data: {:confirm => 'Are you sure?'}, :method => :delete
-
-br
-
-= link_to 'New Project', new_project_path
+      td = link_to project.name, project_path(project)
+      td = project.owner.name

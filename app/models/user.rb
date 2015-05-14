@@ -1,8 +1,11 @@
 class User < ActiveRecord::Base
 
-  ROLES = %w[manager admin]
+  ROLES = %w[user manager admin]
 
   # Associations
+  has_many :memberships
+  has_many :projects, through: :memberships
+  has_many :tickets
 
   # Validation
   validates_presence_of :email

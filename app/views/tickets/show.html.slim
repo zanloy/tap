@@ -1,0 +1,38 @@
+.container-fluid
+  - if can? :manage, @project
+    .row.actionbar
+      = simple_form_for [@project, @ticket], { class: 'form-inline' } do |f|
+        = f.collection_select :priority, Ticket::PRIORITIES, :to_s, :humanize, { selected: @ticket.priority_name }
+        = f.submit
+  .row
+    h1.text-center
+      = @ticket.title
+  .row
+    .col-md-9
+      .row
+        .col-md-3.text-right
+          strong Status:
+        .col-md-9
+          = @ticket.status.humanize
+      .row
+        .col-md-3.text-right
+          strong Description:
+        .col-md-9
+          = simple_format(@ticket.description)
+    .col-md-3
+      .row
+        strong> Submitted At:
+        = @ticket.created_at.strftime('%D@%I:%M%P')
+      .row
+        strong> Submitted By:
+        = @ticket.submitter.name
+      .row
+        strong> Worker:
+        = @ticket.worker ? @ticket.worker.name : 'Unassigned'
+      .row
+        strong> Priority:
+        = @ticket.priority_name
+
+= link_to 'Edit', edit_ticket_path(@ticket)
+'|
+= link_to 'Back', project_path(@ticket.project)

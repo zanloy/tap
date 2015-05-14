@@ -1,0 +1,11 @@
+= simple_form_for([@project, @ticket]) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :title, { autofocus: true }
+    => f.label :priority
+    = f.collection_select :priority, Ticket::PRIORITIES, :to_s, :humanize, { selected: @ticket.priority_name }
+    = f.input :description, input_html: { rows: 15, placeholder: 'Full Description' }
+
+  .form-actions
+    = f.button :submit

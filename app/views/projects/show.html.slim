@@ -1,6 +1,21 @@
-p#notice = notice
+h1
+  .pull-right
+    => button_to 'Open Ticket', new_project_ticket_path(@project), { method: :get, class: 'btn btn-primary' }
+    - if can? :edit, @project
+      => button_to 'Edit Project', edit_project_path(@project), { method: :get, class: 'btn btn-primary' }
+      => button_to 'Delete Project', project_path(@project), { method: :destroy, class: 'btn btn-danger' }
+  = @project.name
 
-
-= link_to 'Edit', edit_project_path(@project)
-'|
-= link_to 'Back', projects_path
+.row
+  .col-md-9
+    h2 Open Tickets
+    - for ticket in @tickets
+      .row
+        .col-md-3 Priority: #{ticket.priority_name}
+        .col-md-6 = link_to ticket.title, ticket_path(ticket)
+        .col-md-3 = ticket.submitter.name
+  .col-md-3
+    .row
+      h3 Members
+    - for membership in @memberships
+      .row #{membership.user.name} (#{membership.role})

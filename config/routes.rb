@@ -1,9 +1,11 @@
 Rails.application.routes.draw do
 
-  root 'home#index'
+  root 'projects#index'
 
-  resources :projects, path: '/p'
-  resources :users
+  resources :projects, path: '/p' do
+    resources :tickets, path: '/t', shallow: true
+  end
+  resources :users, path: '/u'
 
   resources :sessions, only: [:login, :create, :destroy]
   get 'auth/:provider/callback', to: 'sessions#create'

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150513181113) do
+ActiveRecord::Schema.define(version: 20150514120236) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,6 +32,17 @@ ActiveRecord::Schema.define(version: 20150513181113) do
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
+  create_table "memberships", force: :cascade do |t|
+    t.integer  "project_id",                    null: false
+    t.integer  "user_id",                       null: false
+    t.string   "role",       default: "member", null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+  end
+
+  add_index "memberships", ["project_id"], name: "index_memberships_on_project_id", using: :btree
+  add_index "memberships", ["user_id"], name: "index_memberships_on_user_id", using: :btree
+
   create_table "projects", force: :cascade do |t|
     t.string   "name"
     t.string   "description"
@@ -39,11 +50,29 @@ ActiveRecord::Schema.define(version: 20150513181113) do
     t.boolean  "private",          default: false
     t.integer  "owner_id"
     t.integer  "auto_assignee_id"
+    t.boolean  "show_in_navbar",   default: false
     t.datetime "created_at",                       null: false
     t.datetime "updated_at",                       null: false
   end
 
   add_index "projects", ["owner_id"], name: "index_projects_on_owner_id", using: :btree
+
+  create_table "tickets", force: :cascade do |t|
+    t.integer  "project_id",                         null: false
+    t.integer  "submitter_id",                       null: false
+    t.integer  "worker_id"
+    t.string   "status",       default: "submitted"
+    t.integer  "priority",     default: 2
+    t.string   "title",                              null: false
+    t.text     "description"
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+  end
+
+  add_index "tickets", ["project_id"], name: "index_tickets_on_project_id", using: :btree
+  add_index "tickets", ["status"], name: "index_tickets_on_status", using: :btree
+  add_index "tickets", ["submitter_id"], name: "index_tickets_on_submitter_id", using: :btree
+  add_index "tickets", ["worker_id"], name: "index_tickets_on_worker_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email"
@@ -57,4 +86,7 @@ ActiveRecord::Schema.define(version: 20150513181113) do
     t.datetime "updated_at",       null: false
   end
 
+  add_foreign_key "memberships", "projects"
+  add_foreign_key "memberships", "users"
+  add_foreign_key "tickets", "projects"
 end

@@ -32,7 +32,14 @@ class Ability
       can :manage, Project
     end
     if user.role? :admin
-      can :manage, User
+      can :manage, :all
+    end
+
+    user.memberships.each do |membership|
+      if membership.role? :manager
+        can :manage, membership.project
+      end
     end
   end
+
 end
