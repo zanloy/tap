@@ -1,5 +1,12 @@
 p This is Home#index.
 
-ul
-  - for project in @projects
-    li = link_to project.name, project_path(project)
+table
+  thead
+    tr
+      th Name
+      th Owner
+  tbody
+    - for project in @projects
+      tr
+      td = link_to project.name, project_path(project)
+      td = project.owner.name

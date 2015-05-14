@@ -36,10 +36,11 @@ ActiveRecord::Schema.define(version: 20150513181113) do
     t.string   "name"
     t.string   "description"
     t.string   "icon"
+    t.boolean  "private",          default: false
     t.integer  "owner_id"
-    t.boolean  "private"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.integer  "auto_assignee_id"
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
   end
 
   add_index "projects", ["owner_id"], name: "index_projects_on_owner_id", using: :btree

@@ -1,10 +1,12 @@
 FactoryGirl.define do
+
   factory :project do
-    name "MyString"
-owner nil
-icon "MyString"
-description "MyString"
-private false
+    name { FFaker::Name.name }
+    owner nil
+    icon "MyString"
+    description "MyString"
+    private false
+    auto_assignee nil
   end
 
 end
