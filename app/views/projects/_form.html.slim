@@ -1,10 +1,16 @@
-= simple_form_for(@project) do |f|
+= simple_form_for @project do |f|
   = f.error_notification
 
   .form-inputs
     = f.input :name
     = f.input :description
     = f.input :private
+    h3 Members
+    #memberships
+      = f.simple_fields_for :memberships do |membership|
+        = render 'membership_fields', f: membership
+      .links
+        = link_to_add_association 'add memberhip', f, :memberships
 
   .form-actions
     = f.button :submit

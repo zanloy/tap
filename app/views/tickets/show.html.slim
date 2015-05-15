@@ -2,7 +2,10 @@
   - if can? :manage, @project
     .row.actionbar
       = simple_form_for [@project, @ticket], { class: 'form-inline' } do |f|
-        = f.collection_select :priority, Ticket::PRIORITIES, :to_s, :humanize, { selected: @ticket.priority_name }
+        => f.label 'Status:'
+        => f.collection_select :status, Ticket::STATUSES, :to_s, :humanize, { selected: @ticket.status }
+        => f.label 'Priority:'
+        => f.select :priority, options_for_select(Ticket::PRIORITIES.map.with_index {|v, i| [v, i]}.to_h, selected: @ticket.priority)
         = f.submit
   .row
     h1.text-center

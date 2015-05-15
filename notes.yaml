@@ -4,3 +4,4 @@ todo:
   - 'add ticket model'
   - 'add tickets controller'
   - 'add purchase_item model'
+  - 'remove jquery-autocomplete (it is teh suk)'

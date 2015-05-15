@@ -48,6 +48,8 @@ gem 'delayed_job_active_record'
 gem 'cancan'
 # Generates simple forms (bootstrap compatible)
 gem 'simple_form'
+# Use Cocoon for some jquery form type shit
+gem 'cocoon'
 # Pretty UI shit
 gem 'jquery-ui-rails'
 # Adds autocomplete option to simple forms

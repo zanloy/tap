@@ -6,6 +6,9 @@ class Project < ActiveRecord::Base
   has_many :users, through: :memberships
   has_many :tickets
 
+  accepts_nested_attributes_for :memberships, allow_destroy: true
+  accepts_nested_attributes_for :users
+
   # Validation
   validates_presence_of :name
   validates_uniqueness_of :name

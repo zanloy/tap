@@ -4,6 +4,7 @@ Rails.application.routes.draw do
 
   resources :projects, path: '/p' do
     resources :tickets, path: '/t', shallow: true
+    get :autocomplete_user_name, on: :collection
   end
   resources :users, path: '/u'
 
