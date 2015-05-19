@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
   has_many :memberships
   has_many :projects, through: :memberships
   has_many :tickets
+  has_many :comments
 
   # Validation
   validates_presence_of :email

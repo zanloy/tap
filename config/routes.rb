@@ -3,10 +3,12 @@ Rails.application.routes.draw do
   root 'projects#index'
 
   resources :projects, path: '/p' do
-    resources :tickets, path: '/t'
-    get :autocomplete_user_name, on: :collection
+    resources :tickets, path: '/t', shallow: true do
+      resources :comments, path: '/c', only: :create
+    end
   end
   resources :users, path: '/u'
+  resources :comments, only: :destroy, path: '/c'
 
   resources :sessions, only: [:login, :create, :destroy]
   get 'auth/:provider/callback', to: 'sessions#create'

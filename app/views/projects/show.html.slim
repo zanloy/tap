@@ -12,7 +12,7 @@ h1
     - for ticket in @tickets
       .row
         .col-md-3 Priority: #{ticket.priority_name}
-        .col-md-6 = link_to ticket.title, project_ticket_path(ticket.project, ticket)
+        .col-md-6 = link_to ticket.title, ticket
         .col-md-3 = ticket.submitter.name
   .col-md-3
     .row

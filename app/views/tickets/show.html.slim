@@ -28,6 +28,27 @@
           strong Description:
         .col-md-10
           = simple_format(@ticket.description)
+      hr
+      h4
+        i.glyphicon.glyphicon-comment>
+        ' Comments
+      hr
+      - for comment in @comments
+        .row
+          .col-md-2
+            .row
+              .col-md-12.text-right
+                strong = comment.user.name
+            .row
+              .col-md-12.text-muted.text-right
+                small = comment.created_at.strftime("%D %I:%M%P")
+          .col-md-10
+            = simple_format(comment.comment)
+      .row
+        .col-md-offset-2.col-md-10
+          = simple_form_for [@ticket, Comment.new] do |f|
+            = f.input :comment, label: false
+            = f.submit 'Comment'
     .col-md-5
       h4
         i.glyphicon.glyphicon-user>
@@ -64,6 +85,6 @@
         .col-md-10
           = @ticket.updated_at.strftime('%D @ %I:%M%P')
 
-= link_to 'Edit', edit_project_ticket_path(@project, @ticket)
+= link_to 'Edit', edit_ticket_path(@ticket)
 '|
 = link_to 'Back', project_path(@ticket.project)

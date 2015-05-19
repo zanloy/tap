@@ -6,6 +6,7 @@ class Ticket < ActiveRecord::Base
   belongs_to :project
   belongs_to :submitter, class_name: User
   belongs_to :assignee, class_name: User
+  has_many :comments
 
   # Validation
   validates_presence_of :project, :submitter, :priority, :title
@@ -40,7 +41,7 @@ class Ticket < ActiveRecord::Base
     return 'yellow' if priority == PRIORITIES.index('normal')
     return 'blue' if priority == PRIORITIES.index('low')
   end
-  
+
   PRIORITIES.each_with_index do |meth, index|
     define_method("#{meth}?") { priority == index }
   end
