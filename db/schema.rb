@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150519120714) do
+ActiveRecord::Schema.define(version: 20150519142046) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -65,22 +65,35 @@ ActiveRecord::Schema.define(version: 20150519120714) do
     t.datetime "updated_at",                       null: false
   end
 
+  create_table "purchases", force: :cascade do |t|
+    t.integer  "ticket_id"
+    t.string   "name"
+    t.integer  "quantity",   default: 1
+    t.float    "cost",       default: 0.0
+    t.string   "url"
+    t.string   "status",     default: "waiting"
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+  end
+
+  add_index "purchases", ["ticket_id"], name: "index_purchases_on_ticket_id", using: :btree
+
   create_table "tickets", force: :cascade do |t|
-    t.integer  "project_id",                   null: false
-    t.integer  "submitter_id",                 null: false
+    t.integer  "project_id",                  null: false
+    t.integer  "reporter_id",                 null: false
     t.integer  "assignee_id"
-    t.boolean  "resolved",     default: false
-    t.boolean  "archived",     default: false
-    t.integer  "priority",     default: 1
-    t.string   "title",                        null: false
+    t.boolean  "closed",      default: false
+    t.boolean  "archived",    default: false
+    t.integer  "priority",    default: 1
+    t.string   "title",                       null: false
     t.text     "description"
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
   end
 
   add_index "tickets", ["assignee_id"], name: "index_tickets_on_assignee_id", using: :btree
   add_index "tickets", ["project_id"], name: "index_tickets_on_project_id", using: :btree
-  add_index "tickets", ["submitter_id"], name: "index_tickets_on_submitter_id", using: :btree
+  add_index "tickets", ["reporter_id"], name: "index_tickets_on_reporter_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email"
@@ -98,5 +111,6 @@ ActiveRecord::Schema.define(version: 20150519120714) do
   add_foreign_key "comments", "users"
   add_foreign_key "memberships", "projects"
   add_foreign_key "memberships", "users"
+  add_foreign_key "purchases", "tickets"
   add_foreign_key "tickets", "projects"
 end

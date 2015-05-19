@@ -1,7 +1,7 @@
 FactoryGirl.define do
 
   factory :ticket do
-    submitter nil
+    reporter nil
     project nil
     priority 1
     title "MyString"

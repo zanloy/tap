@@ -8,5 +8,5 @@ worker = User.create(name: 'Johnny Worker', email: 'worker@sparcedge.com')
 it_support.memberships.create(user: worker, role: 1)
 facilities.memberships.create(user: worker, role: 1)
 
-FactoryGirl.create(:ticket, submitter: zan, project: it_support)
-FactoryGirl.create(:ticket, submitter: zan, project: facilities)
+FactoryGirl.create(:ticket, reporter: zan, project: it_support)
+FactoryGirl.create(:ticket, reporter: zan, project: facilities)

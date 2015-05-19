@@ -29,6 +29,32 @@
         .col-md-10
           = simple_format(@ticket.description)
       hr
+      - if @ticket.has_purchases?
+        h4
+          i.glyphicon.glyphicon-shopping-cart>
+          ' Purchases
+        hr
+        .row
+          .col-md-12
+            table.table-striped.col-md-12
+              thead
+                tr
+                  th Name
+                  th Count
+                  th Cost
+                  th Total
+              tbody
+              - for purchase in @purchases
+                tr
+                  td
+                    - if purchase.has_url?
+                      = link_to purchase.name, purchase.url, target: '_blank'
+                    - else
+                      = purchase.name
+                  td = purchase.quantity
+                  td = number_to_currency(purchase.cost)
+                  td = number_to_currency(purchase.total)
+        hr
       h4
         i.glyphicon.glyphicon-comment>
         ' Comments
@@ -49,6 +75,7 @@
           = simple_form_for [@ticket, Comment.new] do |f|
             = f.input :comment, label: false
             = f.submit 'Comment'
+      hr
     .col-md-5
       h4
         i.glyphicon.glyphicon-user>
@@ -63,13 +90,13 @@
         .col-md-2.text-muted.text-right
           strong Reporter:
         .col-md-10
-          = @ticket.submitter.name
+          = @ticket.reporter.name
       .row
         .col-md-2.text-muted.text-right
           strong Watchers:
         .col-md-10
           ' 0
-      br
+      hr
       h4
         i.glyphicon.glyphicon-calendar>
         ' Dates
@@ -84,6 +111,7 @@
           strong Updated:
         .col-md-10
           = @ticket.updated_at.strftime('%D @ %I:%M%P')
+      hr
 
 = link_to 'Edit', edit_ticket_path(@ticket)
 '|

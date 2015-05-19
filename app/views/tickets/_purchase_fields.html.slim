@@ -1,0 +1,13 @@
+.nested-fields
+  .row
+    .col-md-4
+      = f.input :name, label: false, placeholder: 'Item Name'
+    .col-md-3
+      = f.input :url, label: false, placeholder: 'Item URL'
+    .col-md-1
+      = f.input :quantity, collection: (1..100).to_a, label: false, placeholder: 'Quantity'
+    .col-md-1
+      = f.input :cost, label: false, placeholder: 'Cost'
+    .col-md-1
+      = link_to_remove_association f, class: 'btn btn-default btn-xs' do
+        .glyphicon.glyphicon-remove
