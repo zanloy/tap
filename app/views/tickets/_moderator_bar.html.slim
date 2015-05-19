@@ -1,0 +1,18 @@
+.row.actionbar.moderator
+  .pull-right
+    - if @ticket.unresolved?
+      = simple_form_for [@project, @ticket], html: { class: 'form-inline' } do |f|
+        => f.hidden_field :resolved, value: true
+        => f.submit 'Resolve', class: 'btn btn-primary'
+    => link_to edit_project_ticket_path(@project, @ticket), class: 'btn btn-primary' do
+      i.glyphicon.glyphicon-pencil>
+      ' Edit
+    => link_to project_ticket_path(@project, @ticket), class: 'btn btn-danger', data: { method: :delete, confirm: 'Are you sure?' } do
+      i.glyphicon.glyphicon-trash>
+      ' Delete
+  = simple_form_for [@project, @ticket], html: { class: 'form-inline' } do |f|
+    => f.label 'Assign to:'
+    => f.collection_select :assignee_id, @project.workers, :user_id, :user_name, include_blank: true
+    => f.label 'Priority:'
+    => f.select :priority, options_for_select(Ticket::PRIORITIES.map.with_index {|v, i| [v, i]}.to_h, selected: @ticket.priority)
+    => f.submit 'Assign', class: 'btn btn-primary'

@@ -23,6 +23,6 @@ class Project < ActiveRecord::Base
   end
 
   def workers
-    self.memberships.where(role: 'worker')
+    self.memberships.where('role >= 1').order(:role)
   end
 end

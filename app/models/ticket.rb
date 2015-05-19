@@ -1,31 +1,48 @@
 class Ticket < ActiveRecord::Base
 
-  PRIORITIES = %w[info low normal urgent immediate]
-  STATUSES = %w[submitted assigned resolved rejected]
+  PRIORITIES = %w[low normal urgent]
 
   # Associations
   belongs_to :project
   belongs_to :submitter, class_name: User
-  belongs_to :worker, class_name: User
+  belongs_to :assignee, class_name: User
 
   # Validation
   validates_presence_of :project, :submitter, :priority, :title
   validates_numericality_of :priority, only_integer: true, on: :create
 
   # Scopes
-  scope :unresolved, -> { where(status: 'submitted') }
+  scope :unresolved, -> { where(resolved: false) }
 
   # Methods
   def priority_name
     PRIORITIES[priority].humanize
   end
 
-  PRIORITIES.each_with_index do |meth, index|
-    define_method("#{meth}?") { priority == index }
+  def status
+    case
+    when archived && resolved then 'Resolved and Archived'
+    when resolved then 'Resolved'
+    when archived then'Archived'
+    else
+      'Unresolved'
+    end
   end
 
-  STATUSES.each_with_index do |meth, index|
-    define_method("#{meth}?") { status == index }
+  def unresolved?
+    !resolved
+  end
+
+  def flag_color
+    return 'navy' if archived
+    return 'green' if resolved
+    return 'red' if priority == PRIORITIES.index('urgent')
+    return 'yellow' if priority == PRIORITIES.index('normal')
+    return 'blue' if priority == PRIORITIES.index('low')
+  end
+  
+  PRIORITIES.each_with_index do |meth, index|
+    define_method("#{meth}?") { priority == index }
   end
 
 end

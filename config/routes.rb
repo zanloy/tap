@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   root 'projects#index'
 
   resources :projects, path: '/p' do
-    resources :tickets, path: '/t', shallow: true
+    resources :tickets, path: '/t'
     get :autocomplete_user_name, on: :collection
   end
   resources :users, path: '/u'

@@ -3,7 +3,7 @@
     .col-md-6
       = f.association :user, collection: User.all, prompt: 'Select User', label: false
     .col-md-5
-      = f.select :role, options_for_select(Membership::ROLES, selected: f.role)
+      = f.input :role, collection: Membership::ROLES.map.with_index {|v, i| [v, i]}.to_h, label: false
     .col-md-1
       = link_to_remove_association f, class: 'btn btn-default btn-xs' do
         .glyphicon.glyphicon-remove

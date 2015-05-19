@@ -28,6 +28,7 @@ class Ability
     #
     # See the wiki for details:
     # https://github.com/ryanb/cancan/wiki/Defining-Abilities
+    can :read, [Project, Ticket]
     if user.role? :manager
       can :manage, Project
     end
@@ -36,8 +37,12 @@ class Ability
     end
 
     user.memberships.each do |membership|
+      if membership.role? :moderator
+        can :moderate, Ticket, project: membership.project
+      end
       if membership.role? :manager
         can :manage, membership.project
+        can :manage, Ticket, project: membership.project
       end
     end
   end

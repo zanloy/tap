@@ -1,6 +1,6 @@
 class Membership < ActiveRecord::Base
 
-  ROLES = %w[moderator worker manager executive admin]
+  ROLES = %w[member moderator worker manager executive admin]
 
   # Associations
   belongs_to :project
@@ -10,7 +10,16 @@ class Membership < ActiveRecord::Base
 
   # Methods
   def role?(base_role)
-    ROLES.index(base_role.to_s) <= ROLES.index(role)
+    base_role = ROLES.index(base_role.to_s) if base_role.is_a? String or base_role.is_a? Symbol
+    base_role <= role
   end
 
+  def role_name
+    ROLES[role].humanize
+  end
+
+  def user_name
+    self.user.name
+  end
+  
 end

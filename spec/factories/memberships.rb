@@ -1,8 +1,7 @@
 FactoryGirl.define do
   factory :membership do
     project nil
-user nil
-role "MyString"
+    user nil
   end
 
 end

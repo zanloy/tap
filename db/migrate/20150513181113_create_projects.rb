@@ -5,7 +5,6 @@ class CreateProjects < ActiveRecord::Migration
       t.string :description
       t.string :icon
       t.boolean :private, default: false
-      t.belongs_to :owner, class_name: :user, index: true
       t.belongs_to :auto_assignee, class_name: :user
       t.boolean :show_in_navbar, default: false
 

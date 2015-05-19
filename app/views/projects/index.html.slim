@@ -3,13 +3,6 @@ h1
     .pull-right
       = button_to 'Add New Project', new_project_path, { method: :get, class: 'btn btn-primary' }
   ' TaP Projects
-table
-  thead
-    tr
-      th Name
-      th Owner
-  tbody
-    - for project in @projects
-      tr
-      td = link_to project.name, project_path(project)
-      td = project.owner.name
+ul.list-unstyled
+  - for project in @projects
+    li = link_to project.name, project_path(project)

@@ -1,0 +1,6 @@
+.row.actionbar.worker
+  .pull-right
+    - if @ticket.unresolved?
+      = simple_form_for [@project, @ticket], html: { class: 'form-inline' } do |f|
+        => f.hidden_field :resolved, value: true
+        => f.submit 'Resolve', class: 'btn btn-primary'

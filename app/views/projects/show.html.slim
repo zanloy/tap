@@ -12,10 +12,10 @@ h1
     - for ticket in @tickets
       .row
         .col-md-3 Priority: #{ticket.priority_name}
-        .col-md-6 = link_to ticket.title, ticket_path(ticket)
+        .col-md-6 = link_to ticket.title, project_ticket_path(ticket.project, ticket)
         .col-md-3 = ticket.submitter.name
   .col-md-3
     .row
       h3 Members
     - for membership in @memberships
-      .row #{membership.user.name} (#{membership.role})
+      .row #{membership.user.name} (#{membership.role_name})
