@@ -1,8 +1,9 @@
 FactoryGirl.define do
+  
   factory :comment do
     ticket nil
-user nil
-comment "MyText"
+    user nil
+    comment "MyText"
   end
 
 end
