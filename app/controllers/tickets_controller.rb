@@ -1,6 +1,7 @@
 class TicketsController < ApplicationController
   before_action :set_project, only: [:create, :new]
-  before_action :set_ticket, only: [:show, :edit, :update, :destroy]
+  before_action :set_ticket, only: [:show, :edit, :update, :destroy, :approve]
+  before_action :set_role
 
   # GET /tickets
   # GET /tickets.json
@@ -65,6 +66,34 @@ class TicketsController < ApplicationController
     end
   end
 
+  def approve
+    respond_to do |format|
+      if @role == 'manager'
+        @ticket.approving_manager = @current_user
+        @ticket.manager_approved_at = Time.now
+        if @ticket.save
+          format.html { redirect_to ticket_path(@ticket), notice: 'You approved this ticket. It is now awaiting an executive approval.' }
+        else
+          format.html { redirect_to ticket_path(@ticket), alert: 'Failed to save your approval.' }
+        end
+      elsif @role == 'executive'
+        if @ticket.approving_manager == nil
+          @ticket.approving_manager = @current_user
+          @ticket.manager_approved_at = Time.zone.now
+        end
+        @ticket.approving_executive = @current_user
+        @ticket.executive_approved_at = Time.zone.now
+        if @ticket.save
+          format.html { redirect_to @ticket, notice: 'You approved this ticket. It is now locked and forwarded to finance.' }
+        else
+          format.html { redirect_to @ticket, alert: 'Failed to save your approval.' }
+        end
+      else
+        redirect_to :back, alert: 'You do not have the authorization to do that.'
+      end
+    end
+  end
+
   private
 
     def set_project
@@ -73,8 +102,18 @@ class TicketsController < ApplicationController
 
     # Use callbacks to share common setup or constraints between actions.
     def set_ticket
-      @ticket = Ticket.find(params[:id])
+      id = params[:ticket_id] if params.has_key? :ticket_id
+      id = params[:id] if params.has_key? :id
+      @ticket = Ticket.find(id)
       @project = @ticket.project
+    end
+
+    def set_role
+      if member = @project.memberships.find_by_user_id(@current_user.id)
+        @role = member.role_name.downcase
+      else
+        @role = 'guest'
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

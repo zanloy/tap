@@ -15,7 +15,9 @@
       = f.simple_fields_for :purchases do |purchase|
         = render 'purchase_fields', f: purchase
       .links
-        = link_to_add_association 'add purchase item', f, :purchases
+        = link_to_add_association f, :purchases, class: 'btn btn-default btn-xs' do
+          i.glyphicon.glyphicon-plus
+    br
 
   .form-actions
     = f.button :submit

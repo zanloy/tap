@@ -1,6 +1,6 @@
 FactoryGirl.define do
 
-  factory :user do
+  factory :user, aliases: [:owner, :reporter, :assignee] do
     provider "MyString"
     uid "MyString"
     name { FFaker::Name.name }

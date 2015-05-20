@@ -54,5 +54,5 @@ class ApplicationController < ActionController::Base
   def set_navbar_projects
     @navbar_projects = Project.show_in_navbar
   end
-  
+
 end

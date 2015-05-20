@@ -1,11 +1,11 @@
 FactoryGirl.define do
 
   factory :ticket do
-    reporter nil
-    project nil
+    reporter
+    project
     priority 1
-    title "MyString"
-    description "MyText"
+    title { FFaker::Lorem.sentence }
+    description { FFaker::Lorem.paragraphs }
 
     trait :high do
       priority 2

@@ -6,7 +6,6 @@ class CreatePurchases < ActiveRecord::Migration
       t.integer :quantity, default: 1
       t.float :cost, default: 0.0
       t.string :url
-      t.string :status, default: 'waiting'
 
       t.timestamps null: false
     end

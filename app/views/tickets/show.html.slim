@@ -1,118 +1,144 @@
-.container-fluid
-  - if can? :moderate, @project
-    = render 'moderator_bar'
-  - elsif can? :work, @project
-    = render 'worker_bar'
-  .row
-    h1
-      = image_tag "flag-#{@ticket.flag_color}.png", width: '35'
-      = @ticket.title
-  .row
-    .col-md-7
+ol.breadcrumb
+  li = link_to 'Projects', projects_path
+  li = link_to @project.name, @project
+  li = @ticket.title
+- if can? :moderate, @project and not @ticket.locked?
+  = render 'moderator_bar'
+- elsif can? :work, @project and not @ticket.locked?
+  = render 'worker_bar'
+- if can? :approve_purchases, @project and not @ticket.locked?
+  = render 'approval_bar'
+.row
+  h1
+    = image_tag "flag-#{@ticket.flag_color}.png", width: '35'
+    = @ticket.title
+.row
+  .col-md-7
+    h4
+      i.glyphicon.glyphicon-list>
+      ' Details
+    hr
+    .row
+      .col-md-2.text-muted.text-right
+        strong Priority:
+      .col-md-10
+        = @ticket.priority_name
+    .row
+      .col-md-2.text-muted.text-right
+        strong Status:
+      .col-md-10
+        = @ticket.status
+    .row
+      .col-md-2.text-muted.text-right
+        strong Description:
+      .col-md-10
+        = simple_format(@ticket.description)
+    hr
+    - if @ticket.has_purchases?
       h4
-        i.glyphicon.glyphicon-list>
-        ' Details
+        i.glyphicon.glyphicon-shopping-cart>
+        ' Purchases
       hr
       .row
-        .col-md-2.text-muted.text-right
-          strong Priority:
-        .col-md-10
-          = @ticket.priority_name
-      .row
-        .col-md-2.text-muted.text-right
-          strong Status:
-        .col-md-10
-          = @ticket.status
-      .row
-        .col-md-2.text-muted.text-right
-          strong Description:
-        .col-md-10
-          = simple_format(@ticket.description)
+        .col-md-12
+          table.table-striped.col-md-12
+            thead
+              tr
+                th Name
+                th Count
+                th Cost
+                th Total
+            tbody
+            - for purchase in @purchases
+              tr
+                td
+                  - if purchase.has_url?
+                    = link_to purchase.name, purchase.url, target: '_blank'
+                  - else
+                    = purchase.name
+                td = purchase.quantity
+                td = number_to_currency(purchase.cost)
+                td = number_to_currency(purchase.total)
       hr
-      - if @ticket.has_purchases?
-        h4
-          i.glyphicon.glyphicon-shopping-cart>
-          ' Purchases
-        hr
-        .row
-          .col-md-12
-            table.table-striped.col-md-12
-              thead
-                tr
-                  th Name
-                  th Count
-                  th Cost
-                  th Total
-              tbody
-              - for purchase in @purchases
-                tr
-                  td
-                    - if purchase.has_url?
-                      = link_to purchase.name, purchase.url, target: '_blank'
-                    - else
-                      = purchase.name
-                  td = purchase.quantity
-                  td = number_to_currency(purchase.cost)
-                  td = number_to_currency(purchase.total)
-        hr
-      h4
-        i.glyphicon.glyphicon-comment>
-        ' Comments
-      hr
-      - for comment in @comments
-        .row
-          .col-md-2
-            .row
-              .col-md-12.text-right
-                strong = comment.user.name
-            .row
-              .col-md-12.text-muted.text-right
-                small = comment.created_at.strftime("%D %I:%M%P")
-          .col-md-10
-            = simple_format(comment.comment)
+    h4
+      i.glyphicon.glyphicon-comment>
+      ' Comments
+    hr
+    - for comment in @comments
       .row
-        .col-md-offset-2.col-md-10
-          = simple_form_for [@ticket, Comment.new] do |f|
-            = f.input :comment, label: false
-            = f.submit 'Comment'
-      hr
-    .col-md-5
-      h4
-        i.glyphicon.glyphicon-user>
-        ' People
-      hr
-      .row
-        .col-md-2.text-muted.text-right
-          strong Assignee:
+        .col-md-2
+          .row
+            .col-md-12.text-right
+              strong = comment.user.name
+          .row
+            .col-md-12.text-muted.text-right
+              small = comment.created_at.strftime("%D %I:%M%P")
         .col-md-10
-          = @ticket.assignee ? @ticket.assignee.name : ''
-      .row
-        .col-md-2.text-muted.text-right
-          strong Reporter:
-        .col-md-10
-          = @ticket.reporter.name
-      .row
-        .col-md-2.text-muted.text-right
-          strong Watchers:
-        .col-md-10
-          ' 0
-      hr
-      h4
-        i.glyphicon.glyphicon-calendar>
-        ' Dates
-      hr
-      .row
-        .col-md-2.text-muted.text-right
-          strong Created:
-        .col-md-10
-          = @ticket.created_at.strftime('%D @ %I:%M%P')
-      .row
-        .col-md-2.text-muted.text-right
-          strong Updated:
-        .col-md-10
-          = @ticket.updated_at.strftime('%D @ %I:%M%P')
-      hr
-
-= link_to 'Edit', edit_ticket_path(@ticket)
-'|
-= link_to 'Back', project_path(@ticket.project)
+          = simple_format(comment.comment)
+    .row
+      .col-md-offset-2.col-md-10
+        = simple_form_for [@ticket, Comment.new] do |f|
+          = f.input :comment, label: false
+          = f.submit 'Comment'
+    hr
+  .col-md-5
+    h4
+      i.glyphicon.glyphicon-user>
+      ' People
+    hr
+    .row
+      .col-md-2.text-muted.text-right
+        strong Assignee:
+      .col-md-10
+        = @ticket.assignee ? @ticket.assignee.name : ''
+    .row
+      .col-md-2.text-muted.text-right
+        strong Reporter:
+      .col-md-10
+        = @ticket.reporter.name
+    .row
+      .col-md-2.text-muted.text-right
+        strong Watchers:
+      .col-md-10
+        ' 0
+    hr
+    h4
+      i.glyphicon.glyphicon-calendar>
+      ' Dates
+    hr
+    .row
+      .col-md-2.text-muted.text-right
+        strong Created:
+      .col-md-10
+        = @ticket.created_at.strftime('%D @ %I:%M%P')
+    .row
+      .col-md-2.text-muted.text-right
+        strong Updated:
+      .col-md-10
+        = @ticket.updated_at.strftime('%D @ %I:%M%P')
+    hr
+    h4
+      i.glyphicon.glyphicon-ok>
+      ' Approvals
+    hr
+    .row
+      .col-md-2.text-muted.text-right
+        strong Manager:
+      .col-md-10
+        = @ticket.approving_manager ? @ticket.approving_manager.name : 'Awaiting Approval'
+    .row
+      .col-md-2.text-muted.text-right
+        strong Date:
+      .col-md-10
+        = @ticket.manager_approved_at ? @ticket.manager_approved_at.strftime('%D %I:%M%P') : ''
+    .row
+      .col-md-2.text-muted.text-right
+        strong Executive:
+      .col-md-10
+        = @ticket.approving_executive ? @ticket.approving_executive.name : 'Awaiting Approval'
+    .row
+      .col-md-2.text-muted.text-right
+        strong Date:
+      .col-md-10
+        = @ticket.executive_approved_at ? @ticket.executive_approved_at.strftime('%D %I:%M%P') : ''
+    hr

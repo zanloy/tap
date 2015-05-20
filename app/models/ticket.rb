@@ -6,6 +6,8 @@ class Ticket < ActiveRecord::Base
   belongs_to :project
   belongs_to :reporter, class_name: User
   belongs_to :assignee, class_name: User
+  belongs_to :approving_manager, class_name: User
+  belongs_to :approving_executive, class_name: User
   has_many :purchases
   has_many :comments
 
@@ -35,6 +37,26 @@ class Ticket < ActiveRecord::Base
     end
   end
 
+  def manager_approved?
+    if approving_manager
+      return true
+    else
+      return false
+    end
+  end
+
+  def executive_approved?
+    if approving_executive
+      return true
+    else
+      return false
+    end
+  end
+
+  def locked?
+    executive_approved?
+  end
+  
   def has_purchases?
     if purchases.count > 0
       true

@@ -1,13 +1,13 @@
 .nested-fields
-  .row
+  .row.vertical-align
     .col-md-4
-      = f.input :name, label: false, placeholder: 'Item Name'
+      = f.input :name
     .col-md-3
-      = f.input :url, label: false, placeholder: 'Item URL'
+      = f.input :url
     .col-md-1
-      = f.input :quantity, collection: (1..100).to_a, label: false, placeholder: 'Quantity'
+      = f.input :quantity, collection: (1..100).to_a
     .col-md-1
-      = f.input :cost, label: false, placeholder: 'Cost'
+      = f.input :cost
     .col-md-1
-      = link_to_remove_association f, class: 'btn btn-default btn-xs' do
+      = link_to_remove_association f, class: 'btn btn-default btn-md' do
         .glyphicon.glyphicon-remove

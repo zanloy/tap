@@ -1,9 +1,9 @@
 FactoryGirl.define do
-  
+
   factory :comment do
-    ticket nil
-    user nil
-    comment "MyText"
+    ticket
+    user
+    comment { FFaker::Lorem.paragraph }
   end
 
 end

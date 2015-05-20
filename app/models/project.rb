@@ -14,7 +14,7 @@ class Project < ActiveRecord::Base
   validates_uniqueness_of :name
 
   # Scopes
-  scope :show_in_navbar, -> { where(show_in_navbar: true) }
+  scope :show_in_navbar, -> { where(show_in_navbar: true).order(:id) }
   scope :not_private, -> { where(private: false) }
 
   # Methods
