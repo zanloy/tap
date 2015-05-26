@@ -44,11 +44,12 @@ ActiveRecord::Schema.define(version: 20150519142046) do
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
   create_table "memberships", force: :cascade do |t|
-    t.integer  "project_id",             null: false
-    t.integer  "user_id",                null: false
+    t.integer  "project_id",                 null: false
+    t.integer  "user_id",                    null: false
     t.integer  "role",       default: 0
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.boolean  "admin",      default: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
   end
 
   add_index "memberships", ["project_id"], name: "index_memberships_on_project_id", using: :btree

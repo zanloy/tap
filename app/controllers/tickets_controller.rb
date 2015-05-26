@@ -68,28 +68,20 @@ class TicketsController < ApplicationController
 
   def approve
     respond_to do |format|
-      if @role == 'manager'
+      if can? :manager_approve, @ticket and @ticket.approving_manager.nil?
         @ticket.approving_manager = @current_user
         @ticket.manager_approved_at = Time.now
-        if @ticket.save
-          format.html { redirect_to ticket_path(@ticket), notice: 'You approved this ticket. It is now awaiting an executive approval.' }
-        else
-          format.html { redirect_to ticket_path(@ticket), alert: 'Failed to save your approval.' }
-        end
-      elsif @role == 'executive'
-        if @ticket.approving_manager == nil
-          @ticket.approving_manager = @current_user
-          @ticket.manager_approved_at = Time.zone.now
-        end
+      end
+      if can? :executive_approve, @ticket and @ticket.approving_executive.nil?
         @ticket.approving_executive = @current_user
         @ticket.executive_approved_at = Time.zone.now
-        if @ticket.save
-          format.html { redirect_to @ticket, notice: 'You approved this ticket. It is now locked and forwarded to finance.' }
-        else
-          format.html { redirect_to @ticket, alert: 'Failed to save your approval.' }
-        end
+        @ticket.closed = true
+      end
+        
+      if @ticket.save
+        format.html { redirect_to ticket_path(@ticket), notice: 'Ticket approved.' }
       else
-        redirect_to :back, alert: 'You do not have the authorization to do that.'
+        format.html { redirect_to ticket_path(@ticket), alert: 'Failed to save your approval.' }
       end
     end
   end

@@ -8,4 +8,4 @@
     => link_to ticket_approve_path(@ticket), class: 'btn btn-primary' do
       i.glyphicon.glyphicon-ok>
       ' Approve
-    ' This ticket has #{@ticket.purchases.count} items totalling #{@ticket.total_cost}.
+    ' This ticket has #{@ticket.purchases.count} items totalling #{number_to_currency(@ticket.total_cost)}.

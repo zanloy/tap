@@ -16,6 +16,7 @@ class Ticket < ActiveRecord::Base
   # Validation
   validates_presence_of :project, :reporter, :priority, :title
   validates_numericality_of :priority, only_integer: true, on: :create
+  validate :can_close?, if: :closed?
 
   # Scopes
   scope :open, -> { where(closed: false, archived: false) }
@@ -56,7 +57,7 @@ class Ticket < ActiveRecord::Base
   def locked?
     executive_approved?
   end
-  
+
   def has_purchases?
     if purchases.count > 0
       true
@@ -80,6 +81,13 @@ class Ticket < ActiveRecord::Base
 
   def closed?
     closed
+  end
+
+  def can_close?
+    return unless has_purchases?
+    if approving_executive.nil?
+      errors.add(:closed, 'Tickets with purchases must be approved before they can be closed.')
+    end
   end
 
   def flag_color

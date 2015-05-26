@@ -1,12 +1,12 @@
 FactoryGirl.define do
 
   factory :user, aliases: [:owner, :reporter, :assignee] do
-    provider "MyString"
-    uid "MyString"
+    provider 'google_oauth2'
+    uid '12345'
     name { FFaker::Name.name }
-    email { FFaker::Internet.email }
-    oauth_token "MyString"
-    oauth_expires_at "2015-05-11 15:46:13"
+    email { [FFaker::Internet.user_name, 'sparcedge.com'].join('@') }
+    oauth_token 'abc123'
+    oauth_expires_at { 1.day.from_now }
   end
 
 end

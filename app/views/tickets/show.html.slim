@@ -37,7 +37,7 @@ ol.breadcrumb
     - if @ticket.has_purchases?
       h4
         i.glyphicon.glyphicon-shopping-cart>
-        ' Purchases
+        ' Purchases (#{number_to_currency(@ticket.total_cost)})
       hr
       .row
         .col-md-12
@@ -87,17 +87,17 @@ ol.breadcrumb
       ' People
     hr
     .row
-      .col-md-2.text-muted.text-right
+      .col-md-2.text-muted
         strong Assignee:
       .col-md-10
         = @ticket.assignee ? @ticket.assignee.name : ''
     .row
-      .col-md-2.text-muted.text-right
+      .col-md-2.text-muted
         strong Reporter:
       .col-md-10
         = @ticket.reporter.name
     .row
-      .col-md-2.text-muted.text-right
+      .col-md-2.text-muted
         strong Watchers:
       .col-md-10
         ' 0
@@ -107,12 +107,12 @@ ol.breadcrumb
       ' Dates
     hr
     .row
-      .col-md-2.text-muted.text-right
+      .col-md-2.text-muted
         strong Created:
       .col-md-10
         = @ticket.created_at.strftime('%D @ %I:%M%P')
     .row
-      .col-md-2.text-muted.text-right
+      .col-md-2.text-muted
         strong Updated:
       .col-md-10
         = @ticket.updated_at.strftime('%D @ %I:%M%P')
@@ -122,22 +122,22 @@ ol.breadcrumb
       ' Approvals
     hr
     .row
-      .col-md-2.text-muted.text-right
+      .col-md-2.text-muted
         strong Manager:
       .col-md-10
         = @ticket.approving_manager ? @ticket.approving_manager.name : 'Awaiting Approval'
     .row
-      .col-md-2.text-muted.text-right
+      .col-md-2.text-muted
         strong Date:
       .col-md-10
         = @ticket.manager_approved_at ? @ticket.manager_approved_at.strftime('%D %I:%M%P') : ''
     .row
-      .col-md-2.text-muted.text-right
+      .col-md-2.text-muted
         strong Executive:
       .col-md-10
         = @ticket.approving_executive ? @ticket.approving_executive.name : 'Awaiting Approval'
     .row
-      .col-md-2.text-muted.text-right
+      .col-md-2.text-muted
         strong Date:
       .col-md-10
         = @ticket.executive_approved_at ? @ticket.executive_approved_at.strftime('%D %I:%M%P') : ''

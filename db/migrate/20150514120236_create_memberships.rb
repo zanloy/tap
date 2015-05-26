@@ -4,6 +4,7 @@ class CreateMemberships < ActiveRecord::Migration
       t.belongs_to :project, index: true, foreign_key: true, null: false
       t.belongs_to :user, index: true, foreign_key: true, null: false
       t.integer :role, default: 0
+      t.boolean :admin, default: false
 
       t.timestamps null: false
     end

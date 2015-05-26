@@ -6,7 +6,8 @@ require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
 require 'capybara/rails'
 require 'ffaker'
-require 'support/factory_girl'
+Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
+#require 'support/factory_girl'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -70,5 +71,7 @@ RSpec.configure do |config|
   config.after(:each) do
     DatabaseCleaner.clean
   end
+
+  config.include IntegrationSpecHelper, type: :request
 
 end

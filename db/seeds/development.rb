@@ -12,4 +12,7 @@ it_ticket = FactoryGirl.create(:ticket, reporter: zan, project: it_support)
 facilities_ticket = FactoryGirl.create(:ticket, reporter: zan, project: facilities)
 
 # Add Purchases
-it_ticket.purchases.create(name: 'Samsung Galaxy DooDoo5', url: 'http://amazon.com', quantity: 1, cost: 249.99)
+FactoryGirl.create_list(:purchase, 5, ticket: it_ticket)
+
+# Add Comments
+FactoryGirl.create(:comment, ticket: it_ticket, user: zan)
