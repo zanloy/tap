@@ -15,6 +15,7 @@ class Membership < ActiveRecord::Base
   end
 
   def role_name
+    return '' if role >= ROLES.count
     ROLES[role].humanize
   end
 

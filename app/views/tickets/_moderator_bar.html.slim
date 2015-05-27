@@ -1,9 +1,7 @@
 .row.actionbar.moderator
   .pull-right
     - if @ticket.open?
-      = simple_form_for @ticket, html: { class: 'form-inline' } do |f|
-        => f.hidden_field :closed, value: true
-        => f.submit 'Close', class: 'btn btn-primary'
+      = link_to 'Close', ticket_close(@ticket), class: 'btn btn-primary'
       => link_to edit_ticket_path(@ticket), class: 'btn btn-primary' do
         i.glyphicon.glyphicon-pencil>
         ' Edit

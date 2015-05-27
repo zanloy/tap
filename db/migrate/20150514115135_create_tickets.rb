@@ -9,6 +9,8 @@ class CreateTickets < ActiveRecord::Migration
       t.integer :priority, default: 1
       t.string :title, null: false
       t.text :description
+      t.belongs_to :closed_by, class_name: :user
+      t.datetime :closed_at
       t.belongs_to :approving_manager, class_name: :user
       t.datetime :manager_approved_at
       t.belongs_to :approving_executive, class_name: :user

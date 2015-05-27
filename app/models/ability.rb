@@ -36,6 +36,11 @@ class Ability
       can :manage, :all
     end
 
+    user.tickets.each do |ticket|
+      can :edit, ticket
+      can :close, ticket
+    end
+
     user.memberships.each do |membership|
       if membership.role? :worker
         can :work, Ticket, project: membership.project

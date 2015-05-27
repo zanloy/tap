@@ -1,7 +1,6 @@
 class TicketsController < ApplicationController
   before_action :set_project, only: [:create, :new]
-  before_action :set_ticket, only: [:show, :edit, :update, :destroy, :approve]
-  before_action :set_role
+  before_action :set_ticket, except: [:create, :new]
 
   # GET /tickets
   # GET /tickets.json
@@ -66,6 +65,22 @@ class TicketsController < ApplicationController
     end
   end
 
+  def close
+    respond_to do |format|
+      if can? :close, @ticket
+        @ticket.closed = true
+        if @ticket.save
+          format.html { redirect_to @ticket, notice: 'Ticket closed.' }
+        else
+          alert_text = @ticket.errors.messages.map { |k,v| v }.flatten.join(' ')
+          format.html { redirect_to @ticket, alert: alert_text }
+        end
+      else
+        format.html { redirect_to @ticket, alert: 'You do not have permission to close this ticket.' }
+      end
+    end
+  end
+
   def approve
     respond_to do |format|
       if can? :manager_approve, @ticket and @ticket.approving_manager.nil?
@@ -77,7 +92,7 @@ class TicketsController < ApplicationController
         @ticket.executive_approved_at = Time.zone.now
         @ticket.closed = true
       end
-        
+
       if @ticket.save
         format.html { redirect_to ticket_path(@ticket), notice: 'Ticket approved.' }
       else
@@ -88,28 +103,18 @@ class TicketsController < ApplicationController
 
   private
 
-    def set_project
-      @project = Project.find(params[:project_id])
-    end
+  def set_project
+    @project = Project.find(params[:project_id])
+  end
 
-    # Use callbacks to share common setup or constraints between actions.
-    def set_ticket
-      id = params[:ticket_id] if params.has_key? :ticket_id
-      id = params[:id] if params.has_key? :id
-      @ticket = Ticket.find(id)
-      @project = @ticket.project
-    end
+  def set_ticket
+    id = params[:ticket_id] if params.has_key? :ticket_id
+    id = params[:id] if params.has_key? :id
+    @ticket = Ticket.find(id)
+    #@project = @ticket.project
+  end
 
-    def set_role
-      if member = @project.memberships.find_by_user_id(@current_user.id)
-        @role = member.role_name.downcase
-      else
-        @role = 'guest'
-      end
-    end
-
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def ticket_params
-      params.require(:ticket).permit(:title, :description, :priority, :closed, :archived, :assignee_id, purchases_attributes: [:id, :name, :url, :quantity, :cost, :_destroy])
-    end
+  def ticket_params
+    params.require(:ticket).permit(:title, :description, :priority, :closed, :archived, :assignee_id, purchases_attributes: [:id, :name, :url, :quantity, :cost, :_destroy])
+  end
 end

@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
   # Associations
   has_many :memberships
   has_many :projects, through: :memberships
-  has_many :tickets
+  has_many :tickets, foreign_key: :reporter_id
   has_many :comments
 
   # Validation
@@ -17,7 +17,7 @@ class User < ActiveRecord::Base
   scope :sorted, -> { order(:name) }
 
   def role?(base_role)
-    ROLES.index(base_role.to_s) <= ROLES.index(role)
+    ROLES.index(base_role.to_s) <= role
   end
 
   def name_or_email

@@ -4,6 +4,7 @@ Rails.application.routes.draw do
 
   resources :projects, path: '/p' do
     resources :tickets, path: '/t', shallow: true do
+      get 'close', as: 'close'
       get 'approve', as: 'approve'
       resources :comments, path: '/c', only: :create
     end

@@ -6,6 +6,7 @@ class Ticket < ActiveRecord::Base
   belongs_to :project
   belongs_to :reporter, class_name: User
   belongs_to :assignee, class_name: User
+  belongs_to :closed_by, class_name: User
   belongs_to :approving_manager, class_name: User
   belongs_to :approving_executive, class_name: User
   has_many :purchases

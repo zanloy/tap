@@ -1,13 +1,29 @@
 ol.breadcrumb
   li = link_to 'Projects', projects_path
-  li = link_to @project.name, @project
+  li = link_to @ticket.project.name, @ticket.project
   li = @ticket.title
+- if @ticket.locked?
+  .row.actionbar
+    p This ticket is closed and locked.
+- else
+  .row.actionbar
+    .pull-right
+      - if can? :edit, @ticket
+        => link_to edit_ticket_path(@ticket), class: 'btn btn-primary' do
+          i.glyphicon.glyphicon-pencil>
+          ' Edit
+      - if can? :close, @ticket
+        => link_to ticket_close_path(@ticket), class: 'btn btn-primary' do
+          i.glyphicon.glyphicon-lock>
+          ' Close
+    - if @ticket.open? and @ticket.has_purchases? and can? :approve, @ticket.project
+      => link_to ticket_approve_path(@ticket), class: 'btn btn-primary' do
+        i.glyphicon.glyphicon-ok>
+        ' Approve
+      ' This ticket has #{@ticket.purchases.count} items totalling #{number_to_currency(@ticket.total_cost)}.
+
 - if can? :moderate, @project and not @ticket.locked?
   = render 'moderator_bar'
-- elsif can? :work, @project and not @ticket.locked?
-  = render 'worker_bar'
-- if can? :approve_purchases, @project and not @ticket.locked?
-  = render 'approval_bar'
 .row
   h1
     = image_tag "flag-#{@ticket.flag_color}.png", width: '35'
@@ -96,6 +112,12 @@ ol.breadcrumb
         strong Reporter:
       .col-md-10
         = @ticket.reporter.name
+    - if @ticket.closed_by
+      .row
+        .col-md-2.text-muted
+          strong Closer:
+        .col-md-10
+          = @ticket.closed_by.name
     .row
       .col-md-2.text-muted
         strong Watchers:
@@ -111,11 +133,18 @@ ol.breadcrumb
         strong Created:
       .col-md-10
         = @ticket.created_at.strftime('%D @ %I:%M%P')
-    .row
-      .col-md-2.text-muted
-        strong Updated:
-      .col-md-10
-        = @ticket.updated_at.strftime('%D @ %I:%M%P')
+    - unless @ticket.updated_at == @ticket.created_at
+      .row
+        .col-md-2.text-muted
+          strong Updated:
+        .col-md-10
+          = @ticket.updated_at.strftime('%D @ %I:%M%P')
+    - unless @ticket.closed_at == nil
+      .row
+        .col-md-2.text-muted
+          strong Closed:
+        .col-md-10
+          = @ticket.closed_at.strftime('%D @ %I:%M%P')
     hr
     h4
       i.glyphicon.glyphicon-ok>
