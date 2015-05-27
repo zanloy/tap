@@ -1,29 +1,34 @@
-ol.breadcrumb
-  li = link_to 'Projects', projects_path
-  li = link_to @ticket.project.name, @ticket.project
-  li = @ticket.title
 - if @ticket.locked?
   .row.actionbar
-    p This ticket is closed and locked.
+    .col-md-12 This ticket is closed and locked.
 - else
   .row.actionbar
-    .pull-right
-      - if can? :edit, @ticket
-        => link_to edit_ticket_path(@ticket), class: 'btn btn-primary' do
-          i.glyphicon.glyphicon-pencil>
-          ' Edit
-      - if can? :close, @ticket
-        => link_to ticket_close_path(@ticket), class: 'btn btn-primary' do
-          i.glyphicon.glyphicon-lock>
-          ' Close
-    - if @ticket.open? and @ticket.has_purchases? and can? :approve, @ticket.project
-      => link_to ticket_approve_path(@ticket), class: 'btn btn-primary' do
-        i.glyphicon.glyphicon-ok>
-        ' Approve
-      ' This ticket has #{@ticket.purchases.count} items totalling #{number_to_currency(@ticket.total_cost)}.
+    .col-md-12
+      .pull-right
+        - if can? :approve, @ticket
+          => link_to ticket_approve_path(@ticket), class: 'btn btn-primary' do
+            i.glyphicon.glyphicon-ok>
+            ' Approve
+        - elsif can? :close, @ticket
+          => link_to ticket_close_path(@ticket), class: 'btn btn-primary' do
+            i.glyphicon.glyphicon-lock>
+            ' Close
+        - if can? :edit, @ticket
+          => link_to edit_ticket_path(@ticket), class: 'btn btn-primary' do
+            i.glyphicon.glyphicon-pencil>
+            ' Edit
+        - if can? :delete, @ticket
+          => link_to ticket_path(@ticket), class: 'btn btn-danger', data: { method: :delete, confirm: 'Are you sure?' } do
+            i.glyphicon.glyphicon-trash>
+            ' Delete
+      - if can? :moderate, @ticket
+        = simple_form_for @ticket, html: { class: 'form-inline' } do |f|
+          => f.label 'Assign to:'
+          => f.collection_select :assignee_id, @ticket.project.workers, :user_id, :user_name, include_blank: true
+          => f.label 'Priority:'
+          => f.select :priority, options_for_select(Ticket::PRIORITIES.map.with_index {|v, i| [v, i]}.to_h, selected: @ticket.priority)
+          => f.submit 'Assign', class: 'btn btn-primary'
 
-- if can? :moderate, @project and not @ticket.locked?
-  = render 'moderator_bar'
 .row
   h1
     = image_tag "flag-#{@ticket.flag_color}.png", width: '35'

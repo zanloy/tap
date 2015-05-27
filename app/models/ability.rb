@@ -36,7 +36,7 @@ class Ability
       can :manage, :all
     end
 
-    user.tickets.each do |ticket|
+    user.tickets.open.each do |ticket|
       can :edit, ticket
       can :close, ticket
     end
@@ -47,9 +47,12 @@ class Ability
       end
       if membership.role? :moderator
         can :moderate, Ticket, project: membership.project
+        can :close, Ticket, project: membership.project
+        can :delete, Ticket, project: membership.project
       end
       if membership.role? :manager
         can :manage, membership.project
+        can :approve, Ticket, project: membership.project, has_purchases?: true
         can :manager_approve, Ticket, project: membership.project
       end
       if membership.role? :executive

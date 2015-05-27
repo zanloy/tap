@@ -1,6 +1,3 @@
-ol.breadcrumb
-  li = link_to 'Projects', projects_path
-  li = @project.name
 h1
   .pull-right
     => button_to 'Open Ticket', new_project_ticket_path(@project), { method: :get, class: 'btn btn-primary' }

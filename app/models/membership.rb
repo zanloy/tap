@@ -1,6 +1,6 @@
 class Membership < ActiveRecord::Base
 
-  ROLES = %w[member moderator worker manager executive]
+  ROLES = %w[member worker moderator manager executive]
 
   # Associations
   belongs_to :project

@@ -13,6 +13,11 @@ class TicketsController < ApplicationController
   def show
     @purchases = @ticket.purchases
     @comments = @ticket.comments
+    @crumbs = [
+      { text: 'Projects', link_to: projects_path },
+      { text: @ticket.project.name, link_to: project_path(@ticket.project) },
+      { text: @ticket.title },
+    ]
   end
 
   # GET /tickets/new

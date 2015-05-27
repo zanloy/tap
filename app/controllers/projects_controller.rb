@@ -14,6 +14,10 @@ class ProjectsController < ApplicationController
   def show
     @tickets = @project.tickets.open
     @memberships = @project.memberships
+    @crumbs = [
+      { text: 'Projects', link_to: projects_path },
+      { text: @project.name },
+    ]
   end
 
   # GET /projects/new

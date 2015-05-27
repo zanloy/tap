@@ -9,7 +9,7 @@ html
     body
       .container
         - if @current_user
-          nav.navbar-default role='navigation'
+          nav.navbar-inverse role='navigation'
             .container-fluid
               .navbar-header
                 button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1"
@@ -34,6 +34,7 @@ html
                     = link_to signout_path, class: 'navbar-link' do
                       == glyphicon :'log-out'
 
+        == display_breadcrumbs @crumbs
         == render 'layouts/flash_messages'
         == yield
 

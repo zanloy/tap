@@ -1,5 +1,19 @@
 module ApplicationHelper
 
+  def display_breadcrumbs(crumbs)
+    return unless crumbs
+    result = "<ol class='breadcrumb'>"
+    crumbs.each do |crumb|
+      if crumb.has_key? :link_to
+        result += "<li>#{link_to crumb[:text], crumb[:link_to]}</li>"
+      else
+        result += "<li>#{crumb[:text]}</li>"
+      end
+    end
+    result += "</ol>"
+    return result
+  end
+
   def flash_class(level)
     case level
     when :notice then 'alert alert-info'
