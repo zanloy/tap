@@ -80,5 +80,5 @@ end
 group :development do
   gem 'capistrano-rails'
   gem 'capistrano-rbenv'
-  #gem 'capistrano-file-permissions'
+  gem 'capistrano-file-permissions'
 end
