@@ -12,7 +12,7 @@ class Ticket < ActiveRecord::Base
   has_many :purchases
   has_many :comments
 
-  accepts_nested_attributes_for :purchases, allow_destroy: true
+  accepts_nested_attributes_for :purchases, reject_if: :all_blank, allow_destroy: true
 
   # Validation
   validates_presence_of :project, :reporter, :priority, :title
@@ -56,7 +56,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def locked?
-    executive_approved?
+    closed?
   end
 
   def has_purchases?
@@ -65,6 +65,15 @@ class Ticket < ActiveRecord::Base
     else
       false
     end
+  end
+
+  def total_items
+    return 0 unless has_purchases?
+    total = 0
+    purchases.each do |item|
+      total += purchases.count
+    end
+    return total
   end
 
   def total_cost

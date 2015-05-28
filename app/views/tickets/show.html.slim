@@ -1,12 +1,9 @@
-- if @ticket.locked?
-  .row.actionbar
-    .col-md-12 This ticket is closed and locked.
-- else
+- unless @ticket.locked?
   .row.actionbar
     .col-md-12
       .pull-right
         - if can? :approve, @ticket
-          => link_to ticket_approve_path(@ticket), class: 'btn btn-primary' do
+          => link_to ticket_approve_path(@ticket), class: 'btn btn-primary', data: { confirm: 'Approve Purchases?', :'confirm-button-text' => 'Approve', text: "This ticket has #{@ticket.total_items} item(s) for #{number_to_currency(@ticket.total_cost)}." } do
             i.glyphicon.glyphicon-ok>
             ' Approve
         - elsif can? :close, @ticket
@@ -18,7 +15,7 @@
             i.glyphicon.glyphicon-pencil>
             ' Edit
         - if can? :delete, @ticket
-          => link_to ticket_path(@ticket), class: 'btn btn-danger', data: { method: :delete, confirm: 'Are you sure?' } do
+          => link_to ticket_path(@ticket), class: 'btn btn-danger', data: { method: :delete, confirm: 'Are you sure?', :'confirm-button-text' => 'Delete' } do
             i.glyphicon.glyphicon-trash>
             ' Delete
       - if can? :moderate, @ticket
@@ -35,24 +32,25 @@
     = @ticket.title
 .row
   .col-md-7
+    hr
     h4
       i.glyphicon.glyphicon-list>
       ' Details
     hr
     .row
-      .col-md-2.text-muted.text-right
-        strong Priority:
-      .col-md-10
-        = @ticket.priority_name
-    .row
-      .col-md-2.text-muted.text-right
+      .col-md-3.text-muted.text-right
         strong Status:
-      .col-md-10
+      .col-md-9
         = @ticket.status
     .row
-      .col-md-2.text-muted.text-right
+      .col-md-3.text-muted.text-right
+        strong Priority:
+      .col-md-9
+        = @ticket.priority_name
+    .row
+      .col-md-3.text-muted.text-right
         strong Description:
-      .col-md-10
+      .col-md-9
         = simple_format(@ticket.description)
     hr
     - if @ticket.has_purchases?
@@ -87,47 +85,43 @@
     hr
     - for comment in @comments
       .row
-        .col-md-2
+        .col-md-3
           .row
             .col-md-12.text-right
               strong = comment.user.name
           .row
             .col-md-12.text-muted.text-right
               small = comment.created_at.strftime("%D %I:%M%P")
-        .col-md-10
+        .col-md-9
           = simple_format(comment.comment)
     .row
-      .col-md-offset-2.col-md-10
+      .col-md-offset-3.col-md-9
         = simple_form_for [@ticket, Comment.new] do |f|
           = f.input :comment, label: false
           = f.submit 'Comment'
     hr
   .col-md-5
+    hr
     h4
       i.glyphicon.glyphicon-user>
       ' People
     hr
     .row
       .col-md-2.text-muted
-        strong Assignee:
-      .col-md-10
-        = @ticket.assignee ? @ticket.assignee.name : ''
-    .row
-      .col-md-2.text-muted
         strong Reporter:
       .col-md-10
         = @ticket.reporter.name
+    .row
+      .col-md-2.text-muted
+        strong Assignee:
+      .col-md-10
+        = @ticket.assignee ? @ticket.assignee.name : ''
     - if @ticket.closed_by
       .row
         .col-md-2.text-muted
           strong Closer:
         .col-md-10
           = @ticket.closed_by.name
-    .row
-      .col-md-2.text-muted
-        strong Watchers:
-      .col-md-10
-        ' 0
     hr
     h4
       i.glyphicon.glyphicon-calendar>
@@ -151,28 +145,29 @@
         .col-md-10
           = @ticket.closed_at.strftime('%D @ %I:%M%P')
     hr
-    h4
-      i.glyphicon.glyphicon-ok>
-      ' Approvals
-    hr
-    .row
-      .col-md-2.text-muted
-        strong Manager:
-      .col-md-10
-        = @ticket.approving_manager ? @ticket.approving_manager.name : 'Awaiting Approval'
-    .row
-      .col-md-2.text-muted
-        strong Date:
-      .col-md-10
-        = @ticket.manager_approved_at ? @ticket.manager_approved_at.strftime('%D %I:%M%P') : ''
-    .row
-      .col-md-2.text-muted
-        strong Executive:
-      .col-md-10
-        = @ticket.approving_executive ? @ticket.approving_executive.name : 'Awaiting Approval'
-    .row
-      .col-md-2.text-muted
-        strong Date:
-      .col-md-10
-        = @ticket.executive_approved_at ? @ticket.executive_approved_at.strftime('%D %I:%M%P') : ''
-    hr
+    - if @ticket.has_purchases?
+      h4
+        i.glyphicon.glyphicon-ok>
+        ' Approvals
+      hr
+      .row
+        .col-md-2.text-muted
+          strong Manager:
+        .col-md-10
+          = @ticket.approving_manager ? @ticket.approving_manager.name : 'Awaiting Approval'
+      .row
+        .col-md-2.text-muted
+          strong Date:
+        .col-md-10
+          = @ticket.manager_approved_at ? @ticket.manager_approved_at.strftime('%D %I:%M%P') : ''
+      .row
+        .col-md-2.text-muted
+          strong Executive:
+        .col-md-10
+          = @ticket.approving_executive ? @ticket.approving_executive.name : 'Awaiting Approval'
+      .row
+        .col-md-2.text-muted
+          strong Date:
+        .col-md-10
+          = @ticket.executive_approved_at ? @ticket.executive_approved_at.strftime('%D %I:%M%P') : ''
+      hr

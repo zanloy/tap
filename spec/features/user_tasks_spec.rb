@@ -10,7 +10,8 @@ RSpec.feature 'User Tasks', type: :feature do
     end
   end
 
-  feature 'edits tickets' do
+  feature 'basic ticket' do
+    let(:ticket) { FactoryGirl.create(:ticket, reporter: @current_user) }
     sign_in
 
     scenario 'creates new ticket' do
@@ -21,20 +22,31 @@ RSpec.feature 'User Tasks', type: :feature do
       fill_in 'ticket_description', with: 'Ticket description.'
       click_on 'Create Ticket'
       assert has_content? 'success'
+      assert has_content? 'This is my user ticket.'
+      assert has_content? 'Ticket description.'
     end
 
     scenario 'closes own ticket' do
-      ticket = FactoryGirl.create(:ticket, reporter: @current_user)
       visit ticket_path(ticket)
-      click_on 'Close Ticket'
+      click_on 'Close'
       assert has_content? 'Ticket closed.'
       assert has_content? 'Closed:'
     end
 
     scenario 'can not assign ticket' do
-      ticket = FactoryGirl.create(:ticket, reporter: @current_user)
-      visit edit_ticket_path(ticket)
+      visit ticket_path(ticket)
       assert has_no_select? 'ticket_assignee_id'
     end
+
+    scenario 'does not show moderator or above items' do
+      visit ticket_path(ticket)
+      assert has_no_button? 'Delete'
+    end
+
+    scenario 'can not approve ticket' do
+      visit ticket_approve_path(ticket)
+      assert has_content? 'You do not have access to do that.'
+    end
+
   end
 end

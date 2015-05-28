@@ -16,3 +16,7 @@ FactoryGirl.create_list(:purchase, 5, ticket: it_ticket)
 
 # Add Comments
 FactoryGirl.create(:comment, ticket: it_ticket, user: zan)
+
+# Add tons more!
+FactoryGirl.create_list(:ticket, 50, project: it_support)
+FactoryGirl.create_list(:ticket, 51, project: facilities)

@@ -11,7 +11,9 @@
         = f.simple_fields_for :memberships do |membership|
           = render 'membership_fields', f: membership
         .links
-          = link_to_add_association 'add memberhip', f, :memberships
+          = link_to_add_association f, :memberships, class: 'btn btn-default btn-xs' do
+            i.glyphicon.glyphicon-plus
+    br
 
   .form-actions
     = f.button :submit

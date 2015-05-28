@@ -35,11 +35,13 @@ class TicketsController < ApplicationController
     @ticket = @project.tickets.new(ticket_params)
     @ticket.reporter = @current_user
 
+    logger.debug @ticket.inspect
     respond_to do |format|
       if @ticket.save
         format.html { redirect_to @ticket, notice: 'Ticket was successfully created.' }
         format.json { render :show, status: :created, location: @ticket }
       else
+        logger.debug @ticket.errors.inspect
         format.html { render :new }
         format.json { render json: @ticket.errors, status: :unprocessable_entity }
       end
@@ -65,7 +67,7 @@ class TicketsController < ApplicationController
   def destroy
     @ticket.destroy
     respond_to do |format|
-      format.html { redirect_to project_path(@project), notice: 'Ticket was successfully destroyed.' }
+      format.html { redirect_to project_path(@ticket.project), notice: 'Ticket was deleted.' }
       format.json { head :no_content }
     end
   end
@@ -74,6 +76,8 @@ class TicketsController < ApplicationController
     respond_to do |format|
       if can? :close, @ticket
         @ticket.closed = true
+        @ticket.closed_by = @current_user
+        @ticket.closed_at = Time.zone.now
         if @ticket.save
           format.html { redirect_to @ticket, notice: 'Ticket closed.' }
         else
@@ -88,14 +92,19 @@ class TicketsController < ApplicationController
 
   def approve
     respond_to do |format|
+      unless can? :approve, @ticket
+        format.html { redirect_to ticket_path(@ticket), alert: 'You do not have access to do that.' }
+      end
       if can? :manager_approve, @ticket and @ticket.approving_manager.nil?
         @ticket.approving_manager = @current_user
-        @ticket.manager_approved_at = Time.now
+        @ticket.manager_approved_at = Time.zone.now
       end
       if can? :executive_approve, @ticket and @ticket.approving_executive.nil?
         @ticket.approving_executive = @current_user
         @ticket.executive_approved_at = Time.zone.now
         @ticket.closed = true
+        @ticket.closed_by = @current_user
+        @ticket.closed_at = Time.zone.now
       end
 
       if @ticket.save

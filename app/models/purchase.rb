@@ -6,7 +6,7 @@ class Purchase < ActiveRecord::Base
   belongs_to :ticket
 
   # Validations
-  validates_presence_of :ticket, :name
+  validates_presence_of :name
 
   STATUSES.each do |meth|
     define_method("#{meth}?") { status == meth }

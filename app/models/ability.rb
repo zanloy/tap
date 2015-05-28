@@ -46,6 +46,7 @@ class Ability
         can :work, Ticket, project: membership.project
       end
       if membership.role? :moderator
+        can :edit, Ticket, project: membership.project
         can :moderate, Ticket, project: membership.project
         can :close, Ticket, project: membership.project
         can :delete, Ticket, project: membership.project

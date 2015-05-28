@@ -16,7 +16,7 @@ state_path "#{app_dir}/pids/puma.state"
 preload_app!
 
 rackup      DefaultRackup
-port        ENV['PORT']     || 3000
+port        ENV['PORT']     || 5000
 environment ENV['RACK_ENV'] || 'development'
 
 on_worker_boot do

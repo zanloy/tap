@@ -13,6 +13,8 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery-ui
+//= require sweet-alert
+//= require sweet-alert-confirm
 //= autocomplete-rails
 //= require cocoon
 //= require bootstrap-sprockets
