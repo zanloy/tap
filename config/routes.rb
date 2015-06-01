@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   root 'projects#index'
 
   resources :projects, path: '/p' do
+    get 'closed', as: 'closed'
     resources :tickets, path: '/t', shallow: true do
       get 'close', as: 'close'
       get 'approve', as: 'approve'

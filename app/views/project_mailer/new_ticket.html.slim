@@ -1,0 +1,32 @@
+p The following new ticket has been added to #{@project.name}.
+
+p
+  strong> Title:
+  = @ticket.title
+p
+  strong> Priority:
+  = @ticket.priority_name
+p
+  strong> Description:
+  = @ticket.description
+
+- if @ticket.has_purchases?
+  table
+    thead
+      tr
+        th Name
+        th Quantity
+        th Cost
+        th Total
+    tbody
+      - for purchase in @ticket.purchases
+        tr
+          - if purchase.has_url?
+            td = link_to purchase.name, purchase.url
+          - else
+            td = purchase.name
+          td = purchase.quantity
+          td = number_to_currency(purchase.cost)
+          td = number_to_currency(purchase.total)
+
+p = link_to ticket_url(@ticket), ticket_url(@ticket)

@@ -1,7 +1,8 @@
 class ProjectsController < ApplicationController
 
   load_and_authorize_resource except: :create
-  before_action :set_project, only: [:show, :edit, :update, :destroy]
+  before_action :set_project, only: [:show, :edit, :update, :destroy, :closed]
+  before_action :set_crumbs
 
   # GET /projects
   # GET /projects.json
@@ -12,12 +13,13 @@ class ProjectsController < ApplicationController
   # GET /projects/1
   # GET /projects/1.json
   def show
-    @tickets = @project.tickets.open
+    @open_tickets = @project.tickets.open.page(page_param)
+    @closed_tickets = @project.tickets.closed.page(1)
     @memberships = @project.memberships
-    @crumbs = [
-      { text: 'Projects', link_to: projects_path },
-      { text: @project.name },
-    ]
+  end
+
+  def closed
+    @closed_tickets = @project.tickets.closed.page(page_param)
   end
 
   # GET /projects/new
@@ -74,11 +76,26 @@ class ProjectsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_project
-      @project = Project.find(params[:id])
+      if params.has_key? :id
+        @project = Project.find(params[:id])
+      elsif params.has_key? :project_id
+        @project = Project.find(params[:project_id])
+      end
+    end
+
+    def set_crumbs
+      @crumbs = [ { text: 'Projects', link_to: projects_path } ]
+      @crumbs << { text: @project.name, link_to: @project } if @project
+    end
+
+    def page_param
+      if params.has_key? :page
+        return params[:page]
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def project_params
-      params.require(:project).permit(:name, :description, :private, memberships_attributes: [:id, :user_id, :role, :_destroy])
+      params.require(:project).permit(:name, :description, :notification_email, :private, memberships_attributes: [:id, :user_id, :role, :_destroy])
     end
 end

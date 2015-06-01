@@ -2,6 +2,8 @@ class Ticket < ActiveRecord::Base
 
   PRIORITIES = %w[low normal urgent]
 
+  after_create :send_notification
+
   # Associations
   belongs_to :project
   belongs_to :reporter, class_name: User
@@ -23,6 +25,8 @@ class Ticket < ActiveRecord::Base
   scope :open, -> { where(closed: false, archived: false) }
   scope :closed, -> { where(closed: true, archived: false) }
   scope :archived, -> { where(archived: true) }
+
+  self.per_page = 15
 
   # Methods
   def priority_name
@@ -110,6 +114,13 @@ class Ticket < ActiveRecord::Base
 
   PRIORITIES.each_with_index do |meth, index|
     define_method("#{meth}?") { priority == index }
+  end
+
+  private
+
+  def send_notification
+    #NewTicketNotificationJob.perform_later(self)
+    ProjectMailer.new_ticket(self).deliver_later
   end
 
 end

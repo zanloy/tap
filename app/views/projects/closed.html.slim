@@ -1,0 +1,11 @@
+h1
+  .pull-right
+    => button_to 'Open Ticket', new_project_ticket_path(@project), { method: :get, class: 'btn btn-primary' }
+    - if can? :edit, @project
+      => button_to 'Edit Project', edit_project_path(@project), { method: :get, class: 'btn btn-primary' }
+      => button_to 'Delete Project', project_path(@project), { method: :destroy, class: 'btn btn-danger' }
+  = @project.name
+
+h2 Closed Tickets
+= render partial: 'table', object: @closed_tickets
+.text-center = will_paginate(@closed_tickets)

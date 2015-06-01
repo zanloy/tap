@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150519142046) do
+ActiveRecord::Schema.define(version: 20150528183723) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -59,11 +59,12 @@ ActiveRecord::Schema.define(version: 20150519142046) do
     t.string   "name"
     t.string   "description"
     t.string   "icon"
-    t.boolean  "private",          default: false
+    t.boolean  "private",            default: false
     t.integer  "auto_assignee_id"
-    t.boolean  "show_in_navbar",   default: false
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
+    t.boolean  "show_in_navbar",     default: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+    t.string   "notification_email"
   end
 
   create_table "purchases", force: :cascade do |t|

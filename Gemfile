@@ -78,6 +78,7 @@ group :development, :test do
 end
 
 group :development do
+  gem 'pry-rails'
   gem 'capistrano-rails'
   gem 'capistrano-rbenv'
   gem 'capistrano-file-permissions'

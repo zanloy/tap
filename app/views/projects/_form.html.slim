@@ -4,6 +4,7 @@
   .form-inputs
     = f.input :name
     = f.input :description
+    = f.input :notification_email
     = f.input :private
     - if can? :manage_members, @project
       h3 Members

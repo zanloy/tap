@@ -6,21 +6,22 @@ h1
       => button_to 'Delete Project', project_path(@project), { method: :destroy, class: 'btn btn-danger' }
   = @project.name
 
-.row
-  .col-md-9
-    h2 Open Tickets
-    hr
-    - for ticket in @tickets
-      .row
-        .col-md-12
-          => image_tag("flag-#{ticket.flag_color}.png", width: 25)
-          = link_to ticket.title, ticket
-      .row
-        .col-md-12.text-right.text-muted
-          ' By #{ticket.reporter.name} at #{ticket.created_at.strftime("%D %I:%M%P")}
-      hr
-  .col-md-3
-    .row
-      h3 Members
+ul.nav.nav-pills
+  li.active = link_to 'Open Tickets', '#open', data: { toggle: 'tab' }
+  li = link_to 'Closed Tickets', '#closed', data: { toggle: 'tab' }
+  li = link_to 'Members', '#members', data: { toggle: 'tab' }
+br
+
+.tab-content
+  .tab-pane.fade.in.active id='open'
+    = render partial: 'table', object: @open_tickets
+    .text-center = will_paginate @open_tickets
+
+  .tab-pane.fade.in id='closed'
+    = render partial: 'table', object: @closed_tickets
+    .text-center = link_to 'View all closed tickets', project_closed_path(@project)
+
+  .tab-pane.fade.in id='members'
     - for membership in @memberships
-      .row #{membership.user.name} (#{membership.role_name})
+      .row
+        .col-md-12 #{membership.user.name} (#{membership.role_name})

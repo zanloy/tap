@@ -1,0 +1,9 @@
+- for ticket in table
+  .row
+    .col-md-12
+      => image_tag("flag-#{ticket.flag_color}.png", width: 25)
+      = link_to ticket.title, ticket
+  .row
+    .col-md-12.text-right.text-muted
+      ' By #{ticket.reporter.name} at #{ticket.created_at.strftime("%D %I:%M%P")}
+  hr
