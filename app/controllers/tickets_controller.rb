@@ -1,6 +1,7 @@
 class TicketsController < ApplicationController
   before_action :set_project, only: [:create, :new]
   before_action :set_ticket, except: [:create, :new]
+  before_action :set_crumbs
 
   # GET /tickets
   # GET /tickets.json
@@ -13,11 +14,6 @@ class TicketsController < ApplicationController
   def show
     @purchases = @ticket.purchases
     @comments = @ticket.comments
-    @crumbs = [
-      { text: 'Projects', link_to: projects_path },
-      { text: @ticket.project.name, link_to: project_path(@ticket.project) },
-      { text: @ticket.title },
-    ]
   end
 
   # GET /tickets/new
@@ -108,6 +104,7 @@ class TicketsController < ApplicationController
       end
 
       if @ticket.save
+        TicketMailer.approval_email(self).deliver_later
         format.html { redirect_to ticket_path(@ticket), notice: 'Ticket approved.' }
       else
         format.html { redirect_to ticket_path(@ticket), alert: 'Failed to save your approval.' }
@@ -125,7 +122,12 @@ class TicketsController < ApplicationController
     id = params[:ticket_id] if params.has_key? :ticket_id
     id = params[:id] if params.has_key? :id
     @ticket = Ticket.find(id)
-    #@project = @ticket.project
+  end
+
+  def set_crumbs
+    @crumbs = [ { text: 'Projects', link_to: projects_path } ]
+    @crumbs << { text: @ticket.project.name, link_to: project_path(@ticket.project) } if @ticket
+    @crumbs << { text: @ticket.title } if @ticket
   end
 
   def ticket_params

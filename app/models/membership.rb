@@ -14,6 +14,10 @@ class Membership < ActiveRecord::Base
     base_role <= role
   end
 
+  def self.role_index(role)
+    ROLES.index role.to_s
+  end
+
   def role_name
     return '' if role >= ROLES.count
     ROLES[role].humanize
