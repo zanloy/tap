@@ -11,8 +11,8 @@ class Ticket < ActiveRecord::Base
   belongs_to :closed_by, class_name: User
   belongs_to :approving_manager, class_name: User
   belongs_to :approving_executive, class_name: User
-  has_many :purchases
-  has_many :comments
+  has_many :purchases, dependent: :delete_all
+  has_many :comments, dependent: :delete_all
 
   accepts_nested_attributes_for :purchases, reject_if: :all_blank, allow_destroy: true
 
@@ -34,12 +34,14 @@ class Ticket < ActiveRecord::Base
   end
 
   def status
-    case
-    when archived && closed then 'Closed and Archived'
-    when closed then 'Closed'
-    when archived then'Archived'
+    rtn = []
+    rtn << 'Locked' if locked
+    rtn << 'Closed' if closed
+    rtn << 'Archived' if archived
+    if rtn == []
+      return 'Open'
     else
-      'Open'
+      return rtn.join(', ')
     end
   end
 
@@ -60,7 +62,15 @@ class Ticket < ActiveRecord::Base
   end
 
   def locked?
-    closed?
+    locked
+  end
+
+  def open?
+    !closed
+  end
+
+  def closed?
+    closed
   end
 
   def has_purchases?
@@ -89,17 +99,9 @@ class Ticket < ActiveRecord::Base
     return total
   end
 
-  def open?
-    !closed
-  end
-
-  def closed?
-    closed
-  end
-
   def can_close?
     return unless has_purchases?
-    if approving_executive.nil?
+    if approving_manager.nil?
       errors.add(:closed, 'Tickets with purchases must be approved before they can be closed.')
     end
   end

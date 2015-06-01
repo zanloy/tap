@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150528183723) do
+ActiveRecord::Schema.define(version: 20150601184432) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -96,6 +96,7 @@ ActiveRecord::Schema.define(version: 20150528183723) do
     t.datetime "executive_approved_at"
     t.datetime "created_at",                             null: false
     t.datetime "updated_at",                             null: false
+    t.boolean  "locked",                 default: false
   end
 
   add_index "tickets", ["assignee_id"], name: "index_tickets_on_assignee_id", using: :btree
@@ -103,15 +104,16 @@ ActiveRecord::Schema.define(version: 20150528183723) do
   add_index "tickets", ["reporter_id"], name: "index_tickets_on_reporter_id", using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                        null: false
+    t.string   "email",                            null: false
     t.string   "name"
     t.integer  "role",             default: 0
     t.string   "provider"
     t.string   "uid"
     t.string   "oauth_token"
     t.datetime "oauth_expires_at"
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.boolean  "executive",        default: false
   end
 
   add_foreign_key "comments", "tickets"

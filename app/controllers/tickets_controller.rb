@@ -94,6 +94,7 @@ class TicketsController < ApplicationController
       if can? :manager_approve, @ticket and @ticket.approving_manager.nil?
         @ticket.approving_manager = @current_user
         @ticket.manager_approved_at = Time.zone.now
+        @ticket.locked = true
       end
       if can? :executive_approve, @ticket and @ticket.approving_executive.nil?
         @ticket.approving_executive = @current_user
@@ -104,7 +105,7 @@ class TicketsController < ApplicationController
       end
 
       if @ticket.save
-        TicketMailer.approval_email(self).deliver_later
+        TicketMailer.approval_email(@ticket).deliver_later
         format.html { redirect_to ticket_path(@ticket), notice: 'Ticket approved.' }
       else
         format.html { redirect_to ticket_path(@ticket), alert: 'Failed to save your approval.' }

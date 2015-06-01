@@ -29,4 +29,6 @@ p
           td = number_to_currency(purchase.cost)
           td = number_to_currency(purchase.total)
 
+  p = link_to 'APPROVE', ticket_approve_url(@ticket)
+
 p = link_to ticket_url(@ticket), ticket_url(@ticket)

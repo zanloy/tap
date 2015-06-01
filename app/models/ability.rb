@@ -36,6 +36,9 @@ class Ability
     if user.role? :admin
       can :manage, :all
     end
+    if user.executive
+      can :executive_approve, Ticket
+    end
 
     user.tickets.open.each do |ticket|
       can :edit, ticket
@@ -54,11 +57,8 @@ class Ability
       end
       if membership.role? :manager
         can :manage, membership.project
-        can :approve, Ticket, project: membership.project, has_purchases?: true
+        can :approve, Ticket, project: membership.project, has_purchases?: true, closed: false
         can :manager_approve, Ticket, project: membership.project
-      end
-      if membership.role? :executive
-        can :executive_approve, Ticket, project: membership.project
       end
     end
   end

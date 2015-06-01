@@ -1,6 +1,6 @@
 class Membership < ActiveRecord::Base
 
-  ROLES = %w[member worker moderator manager executive]
+  ROLES = %w[member worker moderator manager]
 
   # Associations
   belongs_to :project
@@ -18,6 +18,11 @@ class Membership < ActiveRecord::Base
     ROLES.index role.to_s
   end
 
+  def self.role_name(index)
+    return if index >= ROLES.count
+    ROLES[index].to_sym
+  end
+  
   def role_name
     return '' if role >= ROLES.count
     ROLES[role].humanize
