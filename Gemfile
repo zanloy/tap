@@ -79,6 +79,7 @@ end
 
 group :development do
   gem 'pry-rails'
+  gem 'awesome_print'
   gem 'capistrano-rails'
   gem 'capistrano-rbenv'
   gem 'capistrano-file-permissions'
