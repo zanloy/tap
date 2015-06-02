@@ -10,7 +10,7 @@ class TicketMailer < ApplicationMailer
       send_to = @project.memberships.where(role: Membership.role_index(:executive))
     else
       # Send email to manager(s)
-      send_to @project.memberhships.where(role: Membership.role_index(:manager))
+      send_to = @project.memberships.where(role: Membership.role_index(:manager))
     end
 
     unless send_to.nil?

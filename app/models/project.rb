@@ -19,10 +19,10 @@ class Project < ActiveRecord::Base
 
   # Methods
   def user_role?(user)
-    self.memberships.first(user_id: user.id).role
+    memberships.where(user_id: user.id).pluck(:role).first
   end
 
   def workers
-    self.memberships.where('role >= 1').order(:role)
+    memberships.where('role >= 1').order(:role)
   end
 end

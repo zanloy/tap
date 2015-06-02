@@ -1,6 +1,6 @@
 FactoryGirl.define do
 
-  factory :user, aliases: [:owner, :reporter, :assignee] do
+  factory :user, aliases: [:reporter, :assignee] do
     provider 'google_oauth2'
     uid '12345'
     name { FFaker::Name.name }

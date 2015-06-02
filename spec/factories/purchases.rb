@@ -1,4 +1,5 @@
 FactoryGirl.define do
+
   factory :purchase do
     ticket
     name { FFaker::Product.product_name }

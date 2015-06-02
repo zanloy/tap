@@ -8,6 +8,9 @@ class Membership < ActiveRecord::Base
 
   accepts_nested_attributes_for :user
 
+  # Validations
+  validates_presence_of :project, :user
+
   # Methods
   def role?(base_role)
     base_role = ROLES.index(base_role.to_s) if base_role.is_a? String or base_role.is_a? Symbol
@@ -22,14 +25,10 @@ class Membership < ActiveRecord::Base
     return if index >= ROLES.count
     ROLES[index].to_sym
   end
-  
+
   def role_name
     return '' if role >= ROLES.count
     ROLES[role].humanize
-  end
-
-  def user_name
-    self.user.name
   end
 
 end
