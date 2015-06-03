@@ -7,6 +7,14 @@ FactoryGirl.define do
     email { [FFaker::Internet.user_name, 'sparcedge.com'].join('@') }
     oauth_token 'abc123'
     oauth_expires_at { 1.day.from_now }
+
+    trait :manager do
+      role 1
+    end
+
+    trait :admin do
+      role 2
+    end
   end
 
 end

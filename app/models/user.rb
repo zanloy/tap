@@ -9,23 +9,14 @@ class User < ActiveRecord::Base
   has_many :comments
 
   # Validation
-  validates_presence_of :email
-  validates_uniqueness_of :email
-  validates_presence_of :name
+  validates_presence_of :email, :name
+  validates_uniqueness_of :email, :name
 
   # Scopes
   scope :sorted, -> { order(:name) }
 
   def role?(base_role)
     ROLES.index(base_role.to_s) <= role
-  end
-
-  def name_or_email
-    if self.name.nil? || self.name.empty?
-      return self.email
-    else
-      return self.name
-    end
   end
 
   def self.from_omniauth(auth)
@@ -42,12 +33,6 @@ class User < ActiveRecord::Base
       user.oauth_expires_at = Time.at(auth.credentials.expires_at)
       user.save!
     end
-  end
-
-  private
-
-  def missing_profile?
-    return self.profile.nil?
   end
 
 end
