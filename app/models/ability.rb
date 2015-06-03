@@ -41,8 +41,8 @@ class Ability
     end
 
     user.tickets.open.each do |ticket|
-      can :edit, ticket
-      can :close, ticket
+      can :edit, ticket, locked: false
+      can :close, ticket, has_purchases?: false
     end
 
     user.memberships.each do |membership|
@@ -50,17 +50,16 @@ class Ability
         can :work, Ticket, project: membership.project
       end
       if membership.role? :moderator
-        can :edit, Ticket, project: membership.project
-        can :moderate, Ticket, project: membership.project
-        can :close, Ticket, project: membership.project
+        can :edit, Ticket, project: membership.project, locked: false
+        can :moderate, Ticket, project: membership.project, locked: false
+        can :close, Ticket, project: membership.project, locked: false
         can :delete, Ticket, project: membership.project
       end
       if membership.role? :manager
         can :manage, membership.project
-        can :approve, Ticket, project: membership.project, has_purchases?: true, closed: false
+        can :approve, Ticket, project: membership.project, has_purchases?: true, locked: false
         can :manager_approve, Ticket, project: membership.project
       end
     end
   end
-
 end

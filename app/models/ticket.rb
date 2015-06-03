@@ -85,7 +85,7 @@ class Ticket < ActiveRecord::Base
     return 0 unless has_purchases?
     total = 0
     purchases.each do |item|
-      total += purchases.count
+      total += item.quantity
     end
     return total
   end
