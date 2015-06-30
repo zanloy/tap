@@ -71,7 +71,7 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'ffaker'
   gem 'guard-rspec'
-  #gem 'ruby_gntp', require: false
+  gem 'ruby_gntp', require: false
   gem 'libnotify', require: false
   gem 'launchy'
   gem 'database_cleaner'

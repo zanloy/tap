@@ -35,4 +35,9 @@ class User < ActiveRecord::Base
     end
   end
 
+  def name_or_email
+    return name unless name.nil?
+    return email
+  end
+  
 end
