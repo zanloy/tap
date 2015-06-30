@@ -25,4 +25,5 @@ class Project < ActiveRecord::Base
   def workers
     memberships.where('role >= 1').order(:role)
   end
+
 end

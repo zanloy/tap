@@ -31,4 +31,8 @@ class Membership < ActiveRecord::Base
     ROLES[role].humanize
   end
 
+  def user_name
+    user.name
+  end  
+
 end
