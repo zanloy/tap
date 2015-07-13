@@ -22,8 +22,8 @@ class Ticket < ActiveRecord::Base
   validate :can_close?, if: :closed?
 
   # Scopes
-  scope :open, -> { where(closed: false, archived: false) }
-  scope :closed, -> { where(closed: true, archived: false) }
+  scope :open, -> { where(closed: false, archived: false).order(priority: :desc, created_at: :desc) }
+  scope :closed, -> { where(closed: true, archived: false).order(closed_at: :desc) }
   scope :archived, -> { where(archived: true) }
 
   self.per_page = 15

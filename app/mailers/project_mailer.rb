@@ -9,4 +9,10 @@ class ProjectMailer < ApplicationMailer
     mail(to: email, subject: "New Ticket in #{@project.name}")
   end
 
+  def assignment_email(ticket)
+    @ticket = ticket
+    @email = @ticket.assignee.email
+    mail(to: email, subject: "You have been assigned ticket #{@ticket.id}")
+  end
+
 end
