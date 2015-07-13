@@ -1,14 +1,18 @@
 require 'rails_helper'
 
-RSpec.describe "tickets/edit", type: :view do
+RSpec.describe 'tickets/edit', type: :view do
   before(:each) do
-    @ticket = assign(:ticket, Ticket.create!())
+    @project = assign(:project, create(:project))
+    @ticket = assign(:ticket, build(:ticket, project: @project))
+    render
   end
 
-  it "renders the edit ticket form" do
-    render
+  it 'renders the _form partial' do
+    expect(response).to render_template(partial: '_form')
+  end
 
-    assert_select "form[action=?][method=?]", ticket_path(@ticket), "post" do
-    end
+  it 'pre-populates the form' do
+    assert_select 'input#ticket_title[name=?]', 'ticket[title]', value: @ticket.title
+    assert_select 'textarea#ticket_description[name=?]', 'ticket[description]', value: @ticket.description
   end
 end

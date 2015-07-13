@@ -67,11 +67,12 @@ group :development, :test do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'rspec-rails'
+  gem 'rspec-activemodel-mocks'
   gem 'capybara'
   gem 'factory_girl_rails'
   gem 'ffaker'
   gem 'guard-rspec'
-  gem 'ruby_gntp', require: false
+  #gem 'ruby_gntp', require: false
   gem 'libnotify', require: false
   gem 'launchy'
   gem 'database_cleaner'
@@ -79,6 +80,7 @@ end
 
 group :development do
   gem 'pry-rails'
+  gem 'rb-readline'
   gem 'awesome_print'
   gem 'capistrano-rails'
   gem 'capistrano-rbenv'

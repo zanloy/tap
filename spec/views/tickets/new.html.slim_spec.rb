@@ -1,14 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe "tickets/new", type: :view do
-  before(:each) do
-    assign(:ticket, Ticket.new())
-  end
-
-  it "renders new ticket form" do
+  it 'renders the _form partial' do
+    assign(:project, create(:project))
+    assign(:ticket, Ticket.new)
     render
-
-    assert_select "form[action=?][method=?]", tickets_path, "post" do
-    end
+    expect(response).to render_template(partial: '_form')
   end
 end

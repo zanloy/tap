@@ -5,7 +5,7 @@ FactoryGirl.define do
     project
     priority 1
     title { FFaker::Lorem.sentence }
-    description { FFaker::Lorem.paragraphs.join("\n\n") }
+    description { FFaker::Lorem.paragraph }
 
     trait :high do
       priority 2
