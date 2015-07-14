@@ -1,14 +1,11 @@
 require 'rails_helper'
 
-RSpec.describe "projects/new", type: :view do
-  before(:each) do
-    assign(:project, Project.new())
-  end
-
-  it "renders new project form" do
+RSpec.describe 'projects/new', type: :view do
+  it 'renders new project form' do
+    ability = Object.new.extend(CanCan::Ability)
+    allow(controller).to receive(:current_ability).and_return(ability)
+    assign(:project, Project.new)
     render
-
-    assert_select "form[action=?][method=?]", projects_path, "post" do
-    end
+    expect(response).to render_template(partial: '_form')
   end
 end
