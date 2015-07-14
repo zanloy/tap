@@ -1,10 +1,10 @@
 .nested-fields
   .row.vertical-align
-    .col-md-4
+    .col-md-3
       = f.input :name
     .col-md-2
       = f.input :url
-    .col-md-1
+    .col-md-2
       = f.input :quantity, collection: (1..100).to_a
     .col-md-2
       = f.input :cost, as: :currency

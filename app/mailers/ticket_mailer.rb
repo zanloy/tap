@@ -1,5 +1,11 @@
 class TicketMailer < ApplicationMailer
 
+  def assignment_email(ticket)
+    @ticket = ticket
+    @email = @ticket.assignee.email
+    mail(to: @email, subject: "You have been assigned ticket ##{@ticket.id}")
+  end
+
   def approval_email(ticket)
     @ticket = ticket
     @project = @ticket.project
@@ -15,7 +21,7 @@ class TicketMailer < ApplicationMailer
 
     unless send_to.nil?
       send_to.each do |user|
-        mail(to: user.email, subject: "Ticket ##{ticket.id} requires your approval.")
+        mail(to: user.email, subject: "Ticket ##{@ticket.id} requires your approval.")
       end
     end
   end

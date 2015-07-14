@@ -3,6 +3,7 @@ class Ticket < ActiveRecord::Base
   PRIORITIES = %w[low normal urgent]
 
   after_create :send_notification
+  after_save :notify_assignee
 
   # Associations
   belongs_to :project
@@ -125,4 +126,9 @@ class Ticket < ActiveRecord::Base
     ProjectMailer.new_ticket(self).deliver_later
   end
 
+  def notify_assignee
+    if assignee_id_changed? and assignee_id != nil
+      TicketMailer.assignment_email(self).deliver_later
+    end
+  end
 end

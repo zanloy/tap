@@ -28,6 +28,7 @@ class Ability
     #
     # See the wiki for details:
     # https://github.com/ryanb/cancan/wiki/Defining-Abilities
+    can :read, User, id: user.id
     can :read, [Project, Ticket]
     can :closed, Project
     if user.role? :manager
