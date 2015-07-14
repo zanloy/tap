@@ -7,15 +7,12 @@ class TicketMailer < ApplicationMailer
   end
 
   def approval_email(ticket)
+    return false if ticket.closed? or !ticket.has_purchases?
     @ticket = ticket
-    @project = @ticket.project
 
-    if not @ticket.approving_executive.nil?
-      # Send email to finance
-    elsif not @ticket.approving_manager.nil?
-      send_to = @project.memberships.where(role: Membership.role_index(:executive))
+    if @ticket.manager_approved?
+      send_to = User.where(executive: true)
     else
-      # Send email to manager(s)
       send_to = @project.memberships.where(role: Membership.role_index(:manager))
     end
 
@@ -24,6 +21,11 @@ class TicketMailer < ApplicationMailer
         mail(to: user.email, subject: "Ticket ##{@ticket.id} requires your approval.")
       end
     end
+  end
+
+  def finance_email(ticket)
+    @ticket = ticket
+    mail(to: 'finance@sparcedge.com', subject: "Ticket ##{@ticket.id} has been approved for purchase.")
   end
 
 end

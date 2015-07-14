@@ -38,7 +38,8 @@ class Ability
       can :manage, :all
     end
     if user.executive
-      can :executive_approve, Ticket
+      can :approve, Ticket, has_purchases?: true
+      can :executive_approve, Ticket, has_purchases?: true
     end
 
     user.tickets.open.each do |ticket|

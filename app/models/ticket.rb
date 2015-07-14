@@ -62,6 +62,15 @@ class Ticket < ActiveRecord::Base
     end
   end
 
+  def disapprove
+    approving_manager = nil
+    manager_approved_at = nil
+    approving_executive = nil
+    executive_approved_at = nil
+    locked = false
+    closed = false
+  end
+
   def locked?
     locked
   end

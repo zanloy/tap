@@ -105,7 +105,11 @@ class TicketsController < ApplicationController
       end
 
       if @ticket.save
-        TicketMailer.approval_email(@ticket).deliver_later
+        if @ticket.executive_approved?
+          TicketMailer.finance_email(@ticket).deliver_later
+        else
+          TicketMailer.approval_email(@ticket).deliver_later
+        end
         format.html { redirect_to ticket_path(@ticket), notice: 'Ticket approved.' }
       else
         format.html { redirect_to ticket_path(@ticket), alert: 'Failed to save your approval.' }

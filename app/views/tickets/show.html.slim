@@ -1,4 +1,4 @@
-- unless @ticket.locked?
+- if (@ticket.open? and can?(:approve, @ticket)) or not @ticket.locked?
   .row.actionbar
     .col-md-12
       .pull-right

@@ -2,12 +2,12 @@
   .row.vertical-align
     .col-md-3
       = f.input :name
-    .col-md-2
+    .col-md-4
       = f.input :url
     .col-md-2
-      = f.input :quantity, collection: (1..100).to_a
+      = f.input :quantity
     .col-md-2
-      = f.input :cost, as: :currency
+      = f.input :cost
     .col-md-1
       = link_to_remove_association f, class: 'btn btn-default btn-md' do
         .glyphicon.glyphicon-remove
