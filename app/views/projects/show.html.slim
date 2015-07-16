@@ -6,7 +6,7 @@ h1
       => button_to 'Delete Project', project_path(@project), { method: :destroy, class: 'btn btn-danger' }
   = @project.name
 
-ul.nav.nav-pills
+ul.nav.nav-tabs
   li.active = link_to 'Open Tickets', '#open', data: { toggle: 'tab' }
   li = link_to 'Closed Tickets', '#closed', data: { toggle: 'tab' }
   li = link_to 'Members', '#members', data: { toggle: 'tab' }
