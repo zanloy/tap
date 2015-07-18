@@ -3,6 +3,10 @@ h1
     .pull-right
       = button_to 'Add New Project', new_project_path, { method: :get, class: 'btn btn-primary' }
   ' TaP Projects
-ul.list-unstyled
-  - for project in @projects
-    li = link_to project.name, project_path(project)
+#projects
+  ul.list-unstyled
+    - for project in @projects
+      li class='project' = link_to project_path(project) do
+        .icon
+          = image_tag "icons/#{project.icon}"
+        p = project.name

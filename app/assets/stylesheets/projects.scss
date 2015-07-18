@@ -12,3 +12,43 @@
 .green-bg {
   background-color: green;
 }
+
+#projects {
+  margin: 0px auto;
+
+  ul {
+    width: 0px auto;
+    display: inline-block;
+    margin: 10px auto;
+  }
+
+  .project {
+    text-align: center;
+    display: block;
+    float: left;
+    margin: 25px 60px 0px 0px;
+  }
+
+  .icon {
+    display: block;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: #333333;
+    text-align: center;
+
+    img {
+      width: 50px;
+      height: 50px;
+      margin: 25% auto;
+    }
+  }
+
+  p {
+    clear: left;
+    float: left;
+    padding: 10px 0px;
+    text-align: center;
+    width: 100%;
+  }
+}
