@@ -86,3 +86,7 @@ group :development do
   gem 'capistrano-rbenv'
   gem 'capistrano-file-permissions'
 end
+
+group :production do
+  gem 'mailgun_rails'
+end
