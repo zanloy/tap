@@ -85,8 +85,11 @@ class ProjectsController < ApplicationController
     end
 
     def set_crumbs
-      @crumbs = [ { text: 'Projects', link_to: projects_path } ]
-      @crumbs << { text: @project.name, link_to: @project } if @project
+      return unless @project # No project means no breadcrumbs
+      @crumbs = [
+        { text: 'Projects', link_to: projects_path },
+        { text: @project.name },
+      ]
     end
 
     def page_param

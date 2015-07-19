@@ -8,8 +8,10 @@ h1
 
 ul.nav.nav-tabs
   li.active = link_to 'Open Tickets', '#open', data: { toggle: 'tab' }
-  li = link_to 'Awaiting Manager Approval', '#awaiting_manager', data: { toggle: 'tab' }
-  li = link_to 'Awaiting Executive Approval', '#awaiting_executive', data: { toggle: 'tab' }
+  - unless @awaiting_manager.empty?
+    li = link_to 'Awaiting Manager Approval', '#awaiting_manager', data: { toggle: 'tab' }
+  - unless @awaiting_executive.empty?
+    li = link_to 'Awaiting Executive Approval', '#awaiting_executive', data: { toggle: 'tab' }
   li = link_to 'Closed Tickets', '#closed', data: { toggle: 'tab' }
   li = link_to 'Members', '#members', data: { toggle: 'tab' }
 br
@@ -18,10 +20,12 @@ br
   .tab-pane.fade.in.active id='open'
     = render partial: 'table', object: @open_tickets
     .text-center = will_paginate @open_tickets
-  .tab-pane.fade.in id='awaiting_manager'
-    = render partial: 'table', object: @awaiting_manager
-  .tab-pane.fade.in id='awaiting_executive'
-    = render partial: 'table', object: @awaiting_executive
+  - unless @awaiting_manager.empty?
+    .tab-pane.fade.in id='awaiting_manager'
+      = render partial: 'table', object: @awaiting_manager
+  - unless @awaiting_executive.empty?
+    .tab-pane.fade.in id='awaiting_executive'
+      = render partial: 'table', object: @awaiting_executive
   .tab-pane.fade.in id='closed'
     = render partial: 'table', object: @closed_tickets
     .text-center = link_to 'View all closed tickets', project_closed_path(@project)
