@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
+
   it 'creates a valid object' do
     expect(build(:user)).to be_valid
   end
@@ -51,7 +52,6 @@ RSpec.describe User, type: :model do
         expect(build(:user, :admin).role? :admin).to eq(true)
       end
     end
-
-    it 'self#from_oauth'
   end
+
 end

@@ -60,10 +60,6 @@ module ApplicationHelper
     end
   end
 
-  def display_environment(environment)
-    link_to environment.name, environment_path(environment)
-  end
-
   def display_email(value)
     return if value.nil? or value.empty?
     link_to value, "mailto:#{value}"
@@ -76,11 +72,6 @@ module ApplicationHelper
       result += "<span class='tag'>#{tag.name}</span> "
     end
     return result
-  end
-
-  def display_phone_number(value)
-    return if value.nil? or value.empty?
-    link_to value, "tel:#{value}"
   end
 
 end
