@@ -10,21 +10,6 @@ class UsersController < ApplicationController
     @tickets = Ticket.open.where(assignee_id: @user.id)
   end
 
-  def new
-  end
-
-  def create
-  end
-
-  def edit
-  end
-
-  def update
-  end
-
-  def destroy
-  end
-
   private
 
   def set_user

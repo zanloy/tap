@@ -9,4 +9,11 @@ class ProjectMailer < ApplicationMailer
     mail(to: email, subject: "New Ticket in #{@project.name}")
   end
 
+  def requires_approval(ticket)
+    if ticket.requires_manager_approval?
+      addresses = ticket.project.managers
+    elsif ticket.requires_executive_approval?
+      addresses = User.where(executive: true)
+    end
+  end
 end

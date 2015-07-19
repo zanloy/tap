@@ -1,5 +1,23 @@
 require 'rails_helper'
 
 RSpec.describe "users/show.html.slim", type: :view do
-  pending "add some examples to (or delete) #{__FILE__}"
+  before(:each) do
+    @user = assign(:user, create(:user))
+    @assigned_tickets = assign(:tickets, create_pair(:ticket, assignee: @user))
+    render
+  end
+
+  it 'shows the user name' do
+    expect(rendered).to match(@user.name)
+  end
+
+  it 'shows the user email' do
+    expect(rendered).to match(@user.email)
+  end
+  
+  it 'shows assigned tickets' do
+    @assigned_tickets.each do |ticket|
+      expect(rendered).to match(ticket.title)
+    end
+  end
 end

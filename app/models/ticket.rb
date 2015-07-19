@@ -23,9 +23,12 @@ class Ticket < ActiveRecord::Base
   validate :can_close?, if: :closed?
 
   # Scopes
-  scope :open, -> { where(closed: false, archived: false).order(priority: :desc, created_at: :desc) }
-  scope :closed, -> { where(closed: true, archived: false).order(closed_at: :desc) }
+  scope :open, -> { not_archived.where(closed: false).order(priority: :desc, created_at: :desc) }
+  scope :closed, -> { not_archived.where(closed: true).order(closed_at: :desc) }
+  scope :awaiting_manager, -> { open.where("purchases_count > 0").where(approving_manager_id: nil) }
+  scope :awaiting_executive, -> { open.where("purchases_count > 0").where.not(approving_manager_id: nil).where(approving_executive_id: nil) }
   scope :archived, -> { where(archived: true) }
+  scope :not_archived, -> { where(archived: false) }
 
   self.per_page = 15
 
@@ -47,19 +50,11 @@ class Ticket < ActiveRecord::Base
   end
 
   def manager_approved?
-    if approving_manager
-      return true
-    else
-      return false
-    end
+    approving_manager ? true : false
   end
 
   def executive_approved?
-    if approving_executive
-      return true
-    else
-      return false
-    end
+    approving_executive ? true : false
   end
 
   def disapprove
@@ -84,11 +79,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def has_purchases?
-    if purchases.count > 0
-      true
-    else
-      false
-    end
+    purchases.count > 0 ? true : false
   end
 
   def total_items
@@ -128,11 +119,43 @@ class Ticket < ActiveRecord::Base
     define_method("#{meth}?") { priority == index }
   end
 
+  def requires_approval?
+    if purchases_count == 0
+      return false
+    else
+      return true
+    end
+  end
+
+  def requires_manager_approval?
+    return false unless requires_approval?
+    if approving_manager_id == nil
+      return true
+    else
+      return false
+    end
+  end
+
+  def requires_executive_approval?
+    return false unless requires_approval?
+    if approving_manager_id != nil && approving_executive_id == nil
+      return true
+    else
+      return false
+    end
+  end
+
   private
 
   def send_notification
-    #NewTicketNotificationJob.perform_later(self)
     ProjectMailer.new_ticket(self).deliver_later
+  end
+
+  # TODO: implement or remove
+  def send_requires_approval_notification
+    if purchase_count_changed? || approving_manager_id_changed?
+      ProjectMailer.requires_approval(self).delivery_later
+    end
   end
 
   def notify_assignee

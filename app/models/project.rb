@@ -4,7 +4,7 @@ class Project < ActiveRecord::Base
   belongs_to :owner, class_name: User
   has_many :memberships
   has_many :users, through: :memberships
-  has_many :tickets
+  has_many :tickets, dependent: :delete_all
 
   accepts_nested_attributes_for :memberships, allow_destroy: true
   accepts_nested_attributes_for :users
@@ -26,4 +26,7 @@ class Project < ActiveRecord::Base
     memberships.where('role >= 1').order(:role)
   end
 
+  def managers
+    memberships.where(role: 3)
+  end
 end

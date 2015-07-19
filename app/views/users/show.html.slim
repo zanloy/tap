@@ -1,4 +1,26 @@
-h1 = @user.name
+.row
+  .col-md-7
+    hr
+    h4
+      i.glyphicon.glyphicon-list>
+      ' Details
+    hr
+.row
+  .col-md-1.text-muted.text-right
+    strong Name:
+  .col-md-11
+    = @user.name
+.row
+  .col-md-1.text-muted.text-right
+    strong Email:
+  .col-md-11
+    = mail_to @user.email
 
-h2 Assigned Tickets
+.row
+  .col-md-7
+    hr
+    h4
+      i.glyphicon.glyphicon-tag>
+      ' Assigned Tickets
+    hr
 == render partial: 'projects/table', object: @tickets

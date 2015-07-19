@@ -14,6 +14,8 @@ class ProjectsController < ApplicationController
   # GET /projects/1.json
   def show
     @open_tickets = @project.tickets.open.page(page_param)
+    @awaiting_manager = @project.tickets.awaiting_manager
+    @awaiting_executive = @project.tickets.awaiting_executive
     @closed_tickets = @project.tickets.closed.page(1)
     @memberships = @project.memberships
   end
@@ -35,7 +37,7 @@ class ProjectsController < ApplicationController
   # POST /projects.json
   def create
     @project = Project.new(project_params)
-    
+
     respond_to do |format|
       if @project.save
         format.html { redirect_to @project, notice: 'Project was successfully created.' }
