@@ -309,6 +309,7 @@ GEM
       colorize (>= 0.7.0)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
+    state_machine (1.2.0)
     sweet-alert (0.0.7)
     sweet-alert-confirm (0.2.0)
       jquery-rails
@@ -387,6 +388,7 @@ DEPENDENCIES
   simple_form
   slim-rails
   spring
+  state_machine
   sweet-alert-confirm
   sweetalert-rails
   therubyracer

@@ -23,50 +23,9 @@ RSpec.describe Ticket, type: :model do
     end
   end
 
-  describe '#status' do
-    it 'returns locked status' do
-      expect(build(:ticket, locked: true).status).to match(/Locked/)
-    end
-
-    it 'returns closed status' do
-      expect(build(:ticket, closed: true).status).to match(/Closed/)
-    end
-
-    it 'returns archived status' do
-      expect(build(:ticket, archived: true).status).to match(/Archived/)
-    end
-
-    it 'returns open status' do
-      expect(build(:ticket).status).to match(/Open/)
-    end
-  end
-
-  describe '#manager_approved?' do
-    it 'returns true if approved' do
-      manager = create(:user)
-      expect(build(:ticket, approving_manager: manager).manager_approved?).to eq(true)
-    end
-
-    it 'returns false if not approved' do
-      expect(build(:ticket).manager_approved?).to eq(false)
-    end
-  end
-
-  describe '#executive_approved?' do
-    it 'returns true if approved' do
-      executive = create(:user)
-      expect(build(:ticket, approving_executive: executive).executive_approved?).to eq(true)
-    end
-
-    it 'returns false if not approved' do
-      expect(build(:ticket).executive_approved?).to eq(false)
-    end
-  end
-
   describe 'has_purchases?' do
     it 'returns true if purchases exist' do
-      ticket = create(:ticket)
-      create(:purchase, ticket: ticket)
+      ticket = create(:ticket_with_purchases)
       expect(ticket.has_purchases?).to eq(true)
     end
 

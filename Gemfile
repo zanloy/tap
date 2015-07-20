@@ -58,6 +58,8 @@ gem 'sweetalert-rails'
 gem 'sweet-alert-confirm'
 # Adds autocomplete option to simple forms
 gem 'rails-jquery-autocomplete'
+# Use state_machine for state
+gem 'state_machine'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

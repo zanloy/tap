@@ -1,4 +1,4 @@
-- if (@ticket.open? and can?(:approve, @ticket)) or not @ticket.locked?
+- if %w[open awaiting_manager awaiting_executive].include? @ticket.state and (can?(:moderate, @ticket) or can?(:approve, @ticket))
   .row.actionbar
     .col-md-12
       .pull-right
@@ -39,9 +39,9 @@
     hr
     .row
       .col-md-3.text-muted.text-right
-        strong Status:
+        strong State:
       .col-md-9
-        = @ticket.status
+        = @ticket.human_state_name
     .row
       .col-md-3.text-muted.text-right
         strong Priority:

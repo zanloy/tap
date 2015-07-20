@@ -3,7 +3,7 @@ class Ticket < ActiveRecord::Base
   PRIORITIES = %w[low normal urgent]
 
   after_create :send_notification
-  after_save :notify_assignee
+  after_save :notify_assignee, :set_state
 
   # Associations
   belongs_to :project
@@ -20,33 +20,54 @@ class Ticket < ActiveRecord::Base
   # Validation
   validates_presence_of :project, :reporter, :priority, :title
   validates_numericality_of :priority, only_integer: true, on: :create
-  validate :can_close?, if: :closed?
 
   # Scopes
-  scope :open, -> { not_archived.where(closed: false).order(priority: :desc, created_at: :desc) }
-  scope :closed, -> { not_archived.where(closed: true).order(closed_at: :desc) }
-  scope :awaiting_manager, -> { open.where("purchases_count > 0").where(approving_manager_id: nil) }
-  scope :awaiting_executive, -> { open.where("purchases_count > 0").where.not(approving_manager_id: nil).where(approving_executive_id: nil) }
-  scope :archived, -> { where(archived: true) }
-  scope :not_archived, -> { where(archived: false) }
+  scope :open,               -> { with_states(:open).order(priority: :desc, created_at: :desc) }
+  scope :closed,             -> { with_states(:closed).order(closed_at: :desc) }
+  scope :awaiting_manager,   -> { with_states(:awaiting_manager).order(:updated_at) }
+  scope :awaiting_executive, -> { with_states(:awaiting_executive).order(:updated_at) }
+  scope :archived,           -> { with_states(:archived).order(:updated_at) }
+  scope :not_archived,       -> { without_states(:archived) }
 
   self.per_page = 15
+
+  state_machine initial: :initialized do
+
+    after_transition all => :awaiting_manager do
+      puts "Awaiting manager approval."
+    end
+
+    after_transition all => :awaiting_executive do
+      puts "Awaiting executive approval."
+    end
+
+    after_transition :open => :closed do
+      puts "Closed from open."
+    end
+
+    after_transition :awaiting_executive => :closed do
+      puts "Email finance."
+    end
+
+    event :set_state do
+      transition [:initialized, :open] => :awaiting_manager, if: :has_purchases?
+      transition [:awaiting_manager, :awaiting_executive] => :closed, if: :approving_executive
+      transition :awaiting_manager => :awaiting_executive, if: :approving_manager
+      transition :initialized => :open
+    end
+
+    # States
+    state :initialized, human_name: 'Initialized'
+    state :open, human_name: 'Open'
+    state :awaiting_manager, human_name: 'Awaiting Manager Approval'
+    state :awaiting_executive, human_name: 'Awaiting Executive Approval'
+    state :closed, human_name: 'Closed'
+    state :archived, human_name: 'Archived'
+  end
 
   # Methods
   def priority_name
     PRIORITIES[priority].humanize
-  end
-
-  def status
-    rtn = []
-    rtn << 'Locked' if locked
-    rtn << 'Closed' if closed
-    rtn << 'Archived' if archived
-    if rtn == []
-      return 'Open'
-    else
-      return rtn.join(', ')
-    end
   end
 
   def manager_approved?
@@ -64,18 +85,6 @@ class Ticket < ActiveRecord::Base
     executive_approved_at = nil
     locked = false
     closed = false
-  end
-
-  def locked?
-    locked
-  end
-
-  def open?
-    !closed
-  end
-
-  def closed?
-    closed
   end
 
   def has_purchases?
@@ -100,50 +109,57 @@ class Ticket < ActiveRecord::Base
     return total
   end
 
-  def can_close?
-    return unless has_purchases?
-    if approving_manager.nil?
-      errors.add(:closed, 'Tickets with purchases must be approved before they can be closed.')
-    end
-  end
+#  def can_close?
+#    return unless has_purchases?
+#    if approving_manager.nil?
+#      errors.add(:closed, 'Tickets with purchases must be approved before they can be closed.')
+#    end
+#  end
 
   def flag_color
-    return 'navy' if archived
-    return 'green' if closed
-    return 'red' if priority == PRIORITIES.index('urgent')
-    return 'yellow' if priority == PRIORITIES.index('normal')
-    return 'blue' if priority == PRIORITIES.index('low')
+    case
+    when state_name == :archived
+      'navy'
+    when state_name == :closed
+      'green'
+    when priority == PRIORITIES.index('urgent')
+      'red'
+    when priority == PRIORITIES.index('normal')
+      'yellow'
+    when priority == PRIORITIES.index('low')
+      'blue'
+    end
   end
 
   PRIORITIES.each_with_index do |meth, index|
     define_method("#{meth}?") { priority == index }
   end
 
-  def requires_approval?
-    if purchases_count == 0
-      return false
-    else
-      return true
-    end
-  end
+#  def requires_approval?
+#    if purchases_count == 0
+#      return false
+#    else
+#      return true
+#    end
+#  end
 
-  def requires_manager_approval?
-    return false unless requires_approval?
-    if approving_manager_id == nil
-      return true
-    else
-      return false
-    end
-  end
+#  def requires_manager_approval?
+#    return false unless requires_approval?
+#    if approving_manager_id == nil
+#      return true
+#    else
+#      return false
+#    end
+#  end
 
-  def requires_executive_approval?
-    return false unless requires_approval?
-    if approving_manager_id != nil && approving_executive_id == nil
-      return true
-    else
-      return false
-    end
-  end
+#  def requires_executive_approval?
+#    return false unless requires_approval?
+#    if approving_manager_id != nil && approving_executive_id == nil
+#      return true
+#    else
+#      return false
+#    end
+#  end
 
   private
 

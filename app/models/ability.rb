@@ -38,13 +38,11 @@ class Ability
       can :manage, :all
     end
     if user.executive
-      can :approve, Ticket, has_purchases?: true
-      can :executive_approve, Ticket, has_purchases?: true
+      can [:approve,:executive_approve], Ticket, state_name: [:awaiting_manager, :awaiting_executive]
     end
 
     user.tickets.open.each do |ticket|
-      can :edit, ticket, locked: false
-      can :close, ticket, has_purchases?: false
+      can [:edit, :close], ticket, state_name: :open
     end
 
     user.memberships.each do |membership|
@@ -52,15 +50,12 @@ class Ability
         can :work, Ticket, project: membership.project
       end
       if membership.role? :moderator
-        can :edit, Ticket, project: membership.project, locked: false
-        can :moderate, Ticket, project: membership.project, locked: false
-        can :close, Ticket, project: membership.project, locked: false
-        can :delete, Ticket, project: membership.project
+        can [:edit,:moderate], Ticket, project: membership.project, state_name: [:open, :awaiting_manager]
+        can [:close,:delete], Ticket, project: membership.project, state_name: :open
       end
       if membership.role? :manager
         can :manage, membership.project
-        can :approve, Ticket, project: membership.project, has_purchases?: true, locked: false
-        can :manager_approve, Ticket, project: membership.project
+        can [:approve,:manager_approve], Ticket, project: membership.project, state_name: :awaiting_manager
       end
     end
   end

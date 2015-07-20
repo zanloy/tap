@@ -14,6 +14,7 @@ class TicketsController < ApplicationController
   def show
     @purchases = @ticket.purchases
     @comments = @ticket.comments
+    console
   end
 
   # GET /tickets/new

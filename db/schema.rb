@@ -80,13 +80,12 @@ ActiveRecord::Schema.define(version: 20150719020528) do
   add_index "purchases", ["ticket_id"], name: "index_purchases_on_ticket_id", using: :btree
 
   create_table "tickets", force: :cascade do |t|
-    t.integer  "project_id",                             null: false
-    t.integer  "reporter_id",                            null: false
+    t.integer  "project_id",                                     null: false
+    t.integer  "reporter_id",                                    null: false
     t.integer  "assignee_id"
-    t.boolean  "closed",                 default: false
-    t.boolean  "archived",               default: false
+    t.string   "state",                  default: "initialized"
     t.integer  "priority",               default: 1
-    t.string   "title",                                  null: false
+    t.string   "title",                                          null: false
     t.text     "description"
     t.integer  "closed_by_id"
     t.datetime "closed_at"
@@ -94,8 +93,8 @@ ActiveRecord::Schema.define(version: 20150719020528) do
     t.datetime "manager_approved_at"
     t.integer  "approving_executive_id"
     t.datetime "executive_approved_at"
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
     t.boolean  "locked",                 default: false
     t.integer  "purchases_count"
     t.integer  "comments_count"
