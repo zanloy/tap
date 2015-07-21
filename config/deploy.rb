@@ -1,7 +1,7 @@
 # config valid only for current version of Capistrano
 lock '3.4.0'
 
-# set :stage, :production
+set :stage, :production
 
 set :application, 'tap'
 set :repo_url, 'git@github.com:zanloy/tap.git'
@@ -102,6 +102,22 @@ namespace :deploy do
       # within release_path do
       #   execute :rake, 'cache:clear'
       # end
+    end
+  end
+
+  # ....
+  # @example
+  #   bundle exec cap uat deploy:invoke task=users:update_defaults
+  desc 'Invoke rake task on the server'
+  task :invoke do
+    fail 'no task provided' unless ENV['task']
+
+    on roles(:app) do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :rake, ENV['task']
+        end
+      end
     end
   end
 
