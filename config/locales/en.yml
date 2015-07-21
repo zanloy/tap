@@ -41,7 +41,7 @@ en:
       # When using html, text and mark won't be used.
       # html: '<abbr title="required">*</abbr>'
     error_notification:
-      default_message: "Please review the problems below:"
+      default_message: 'Please review the problems below:'
     # Examples
     # labels:
     #   defaults:
@@ -61,3 +61,26 @@ en:
     # prompts:
     #   defaults:
     #     age: 'Select your age'
+  details: 'Details'
+  state: 'State'
+  priority: 'Priority'
+  description: 'Description'
+  purchases: 'Purchases'
+  name: 'Name'
+  count: 'Count'
+  cost: 'Cost'
+  total: 'Total'
+  comments: 'Comments'
+  comment: 'Comment'
+  people: 'People'
+  reported_by: 'Reported By'
+  assigned_to: 'Assigned To'
+  closed_by: 'Closed By'
+  dates: 'Dates'
+  created_at: 'Created at'
+  updated_at: 'Updated at'
+  closed_at: 'Closed at'
+  approvals: 'Approvals'
+  manager: 'Manager'
+  date: 'Date'
+  executive: 'Executive'

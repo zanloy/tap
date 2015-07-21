@@ -43,8 +43,8 @@ set :linked_dirs, %w{pids log sockets}
 set :linked_files, %w{.env}
 
 # Fix permissions
-set :file_permissions_paths, ['/srv/rails/picard/shared']
-set :file_permissions_user, 'apps'
+#set :file_permissions_paths, ['/srv/rails/picard/shared']
+#set :file_permissions_user, 'apps'
 
 namespace :foreman do
 

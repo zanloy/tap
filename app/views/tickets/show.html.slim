@@ -43,38 +43,38 @@
     hr
     h4
       i.glyphicon.glyphicon-list>
-      ' Details
+      = t 'details'
     hr
     .row
       .col-md-3.text-muted.text-right
-        strong State:
+        strong #{t('state')}:
       .col-md-9
         = @ticket.human_state_name
     .row
       .col-md-3.text-muted.text-right
-        strong Priority:
+        strong #{t('priority')}:
       .col-md-9
         = @ticket.priority_name
     .row
       .col-md-3.text-muted.text-right
-        strong Description:
+        strong #{t('description')}:
       .col-md-9
         = simple_format(@ticket.description)
     hr
     - if @ticket.has_purchases?
       h4
         i.glyphicon.glyphicon-shopping-cart>
-        ' Purchases (#{number_to_currency(@ticket.total_cost)})
+        ' #{t('purchases')} (#{number_to_currency(@ticket.total_cost)})
       hr
       .row
         .col-md-12
           table.table-striped.col-md-12
             thead
               tr
-                th Name
-                th Count
-                th Cost
-                th Total
+                th #{t('name')}
+                th #{t('count')}
+                th #{t('cost')}
+                th #{t('total')}
             tbody
             - for purchase in @purchases
               tr
@@ -89,7 +89,7 @@
       hr
     h4
       i.glyphicon.glyphicon-comment>
-      ' Comments
+      = t('comments')
     hr
     - for comment in @comments
       .row
@@ -106,76 +106,86 @@
       .col-md-offset-3.col-md-9
         = simple_form_for [@ticket, Comment.new] do |f|
           = f.input :comment, label: false
-          = f.submit 'Comment'
+          = f.submit t('comment')
     hr
   .col-md-5
     hr
     h4
       i.glyphicon.glyphicon-user>
-      ' People
+      = t('people')
     hr
     .row
-      .col-md-2.text-muted
-        strong Reporter:
-      .col-md-10
+      .col-md-12.text-muted
+        strong #{t('reported_by')}:
+    .row
+      .col-md-11.col-md-offset-1
         = @ticket.reporter.name
     .row
-      .col-md-2.text-muted
-        strong Assignee:
-      .col-md-10
+      .col-md-12.text-muted
+        strong #{t('assigned_to')}:
+    .row
+      .col-md-11.col-md-offset-1
         = @ticket.assignee ? @ticket.assignee.name : ''
     - if @ticket.closed_by
       .row
-        .col-md-2.text-muted
-          strong Closer:
-        .col-md-10
+        .col-md-12.text-muted
+          strong #{t('closed_by')}:
+      .row
+        .col-md-11.col-md-offset-1
           = @ticket.closed_by.name
     hr
     h4
       i.glyphicon.glyphicon-calendar>
-      ' Dates
+      = t('dates')
     hr
     .row
-      .col-md-2.text-muted
-        strong Created:
-      .col-md-10
-        = @ticket.created_at.strftime('%D @ %I:%M%P')
+      .col-md-12.text-muted
+        strong #{t('created_at')}:
+    .row
+      .col-md-11.col-md-offset-1
+        = @ticket.created_at.strftime('%D %I:%M%P')
     - unless @ticket.updated_at == @ticket.created_at
       .row
-        .col-md-2.text-muted
-          strong Updated:
-        .col-md-10
-          = @ticket.updated_at.strftime('%D @ %I:%M%P')
+        .col-md-12.text-muted
+          strong #{t('updated_at')}:
+      .row
+        .col-md-11.col-md-offset-1
+          = @ticket.updated_at.strftime('%D %I:%M%P')
     - unless @ticket.closed_at == nil
       .row
-        .col-md-2.text-muted
-          strong Closed:
-        .col-md-10
-          = @ticket.closed_at.strftime('%D @ %I:%M%P')
+        .col-md-12.text-muted
+          strong #{t('closed_at')}:
+      .row
+        .col-md-11.col-md-offset-1
+          = @ticket.closed_at.strftime('%D %I:%M%P')
     hr
     - if @ticket.has_purchases?
       h4
         i.glyphicon.glyphicon-ok>
-        ' Approvals
+        = t('approvals')
       hr
       .row
-        .col-md-2.text-muted
-          strong Manager:
-        .col-md-10
+        .col-md-12.text-muted
+          strong #{t('manager')}:
+      .row
+        .col-md-11.col-md-offset-1
           = @ticket.approving_manager ? @ticket.approving_manager.name : 'Awaiting Approval'
       .row
-        .col-md-2.text-muted
-          strong Date:
-        .col-md-10
+        .col-md-12.text-muted
+          strong #{t('date')}:
+      .row
+        .col-md-11.col-md-offset-1
           = @ticket.manager_approved_at ? @ticket.manager_approved_at.strftime('%D %I:%M%P') : ''
       .row
-        .col-md-2.text-muted
-          strong Executive:
-        .col-md-10
+        .col-md-12.text-muted
+          strong #{t('executive')}:
+      .row
+        .col-md-11.col-md-offset-1
           = @ticket.approving_executive ? @ticket.approving_executive.name : 'Awaiting Approval'
       .row
-        .col-md-2.text-muted
-          strong Date:
-        .col-md-10
+        .col-md-12.text-muted
+          strong #{t('date')}:
+      .row
+        .col-md-11.col-md-offset-1
           = @ticket.executive_approved_at ? @ticket.executive_approved_at.strftime('%D %I:%M%P') : ''
       hr

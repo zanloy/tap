@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   before_filter :store_path, :require_login!, :set_navbar_projects
+  before_action :set_locale
 
   helper_method :is_admin?, :require_admin!, :is_active?
 
@@ -32,7 +33,17 @@ class ApplicationController < ActionController::Base
     'active' if controller_name == controller
   end
 
+  def set_locale
+    logger.debug "* Accept-Language: #{request.env['HTTP_ACCEPT_LANGUAGE']}"
+    I18n.locale = extract_locale_from_accept_language_header
+    logger.debug "* Locale set to '#{I18n.locale}'"
+  end
+
   private
+
+  def extract_locale_from_accept_language_header
+    request.env['HTTP_ACCEPT_LANGUAGE'].scan(/^[a-z]{2}/).first
+  end
 
   def current_user
     begin
