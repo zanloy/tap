@@ -42,9 +42,7 @@ RSpec.feature 'User Tasks', type: :feature do
       visit ticket_path(ticket)
       click_on 'Close'
       expect(page).to have_content 'Ticket closed.'
-      expect(page).to_not have_content 'Unassigned'
-      expect(page).to_not have_content 'Assigned'
-      expect(page).to have_content 'Closed:'
+      expect(page).to have_content 'Closed at:'
     end
 
     scenario 'can not assign ticket' do

@@ -120,12 +120,13 @@
     .row
       .col-md-11.col-md-offset-1
         = @ticket.reporter.name
-    .row
-      .col-md-12.text-muted
-        strong #{t('assigned_to')}:
-    .row
-      .col-md-11.col-md-offset-1
-        = @ticket.assignee ? @ticket.assignee.name : ''
+    - if @ticket.assignee
+      .row
+        .col-md-12.text-muted
+          strong #{t('assigned_to')}:
+      .row
+        .col-md-11.col-md-offset-1
+          = @ticket.assignee ? @ticket.assignee.name : ''
     - if @ticket.closed_by
       .row
         .col-md-12.text-muted

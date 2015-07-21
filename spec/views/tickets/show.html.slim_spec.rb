@@ -15,8 +15,7 @@ RSpec.describe "tickets/show", type: :view do
     expect(rendered).to match(/State:/)
     expect(rendered).to match(/Priority:/)
     expect(rendered).to match(/Description:/)
-    expect(rendered).to match(/Reporter:/)
-    expect(rendered).to match(/Assignee:/)
+    expect(rendered).to match(/Reported By:/)
   end
 
   it 'renders the ticket values' do

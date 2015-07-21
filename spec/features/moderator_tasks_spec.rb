@@ -26,7 +26,7 @@ RSpec.feature 'User Tasks', type: :feature do
       visit ticket_path(ticket)
       click_on 'Close'
       assert has_content? 'Ticket closed.'
-      assert has_content? 'Closed:'
+      assert has_content? 'Closed at:'
     end
 
     scenario 'can assign ticket' do
