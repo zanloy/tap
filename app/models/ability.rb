@@ -28,33 +28,39 @@ class Ability
     #
     # See the wiki for details:
     # https://github.com/ryanb/cancan/wiki/Defining-Abilities
+
+    # Public things.
     can :read, User, id: user.id
-    can :read, [Project, Ticket]
-    can :closed, Project
+    can [:read, :closed], Project, private: false
+    can [:new, :create, :read], Ticket
+
+    # Admin stuff.
     if user.role? :manager
-      can :create, Project
+      can :manage, Project
     end
     if user.role? :admin
       can :manage, :all
     end
     if user.executive
-      can [:approve,:executive_approve], Ticket, state_name: [:awaiting_manager, :awaiting_executive]
+      can [:approve, :executive_approve], Ticket, state_name: [:awaiting_manager, :awaiting_executive]
     end
 
-    user.tickets.open.each do |ticket|
-      can [:edit, :close], ticket, state_name: :open
-    end
+    # User's can control their own destiny!
+    can [:edit, :update, :close], Ticket, reporter: user, state_name: [:unassigned, :assigned]
+    can :reopen, Ticket, reporter: user, closed_by: user, state_name: :closed
 
+    # Membership has it's benefits.
     user.memberships.each do |membership|
       if membership.role? :worker
         can :work, Ticket, project: membership.project
+        can :self_assign, Ticket, project: membership.project, state_name: [:unassigned, :assigned]
       end
       if membership.role? :moderator
-        can [:edit,:moderate], Ticket, project: membership.project, state_name: [:open, :awaiting_manager]
-        can [:close,:delete], Ticket, project: membership.project, state_name: :open
+        can [:update, :edit, :moderate, :close, :destroy], Ticket, project: membership.project, state_name: [:unassigned, :assigned, :awaiting_manager]
+        can :reopen, Ticket, project: membership.project, state_name: :closed
       end
       if membership.role? :manager
-        can :manage, membership.project
+        can :manage, Project, id: membership.project.id
         can [:approve,:manager_approve], Ticket, project: membership.project, state_name: :awaiting_manager
       end
     end

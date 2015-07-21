@@ -8,7 +8,7 @@
 
 zan = User.create(name: 'Zan Loy', email: 'zan.loy@sparcedge.com', role: 'admin')
 justin = User.create(name: 'Justin Boykin', email: 'justin.boykin@sparcedge.com')
-marc = User.create(name: 'Marc Murphy', email: 'marc.murphy@sparcedge.com')
+marc = User.create(name: 'Marc Murphy', email: 'marc.murphy@sparcedge.com', executive: true)
 
 it_support = Project.create(name: 'IT Support', show_in_navbar: true, notification_email: 'its@sparcedge.com', icon: 'support.png')
 facilities = Project.create(name: 'Facilities', show_in_navbar: true, notification_email: 'facilities@sparcedge.com', icon: 'facilities.png')

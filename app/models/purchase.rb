@@ -1,5 +1,7 @@
 class Purchase < ActiveRecord::Base
 
+  after_save :notify_parent
+
   STATUSES = %w[waiting approved rejected]
 
   # Associations
@@ -20,4 +22,10 @@ class Purchase < ActiveRecord::Base
     !url.nil? and !url.empty?
   end
 
+  private
+
+  def notify_parent
+    ticket.set_approval_state
+  end
+  
 end

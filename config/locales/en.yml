@@ -20,4 +20,14 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  activerecord:
+    state_machines:
+      ticket:
+        state:
+          states:
+            unassigned: 'Unassigned'
+            assigned: 'Assigned'
+            awaiting_manager: 'Awaiting Manager Approval'
+            awaiting_executive: 'Awaiting Executive Approval'
+            closed: 'Closed'
+            archived: 'Archived'

@@ -7,6 +7,13 @@ class ApplicationController < ActionController::Base
 
   helper_method :is_admin?, :require_admin!, :is_active?
 
+  rescue_from CanCan::AccessDenied do |exception|
+    respond_to do |format|
+      format.json { render nothing: true, status: :forbidden }
+      format.html { redirect_to root_path, alert: 'You do not have access to do that.' }
+    end
+  end
+
   def is_admin?
     if @current_user && @current_user.admin
       return true

@@ -30,5 +30,17 @@ p
           td = purchase.quantity
           td = number_to_currency(purchase.cost)
           td = number_to_currency(purchase.total)
-
-p = link_to ticket_url(@ticket), ticket_url(@ticket)
+  - if @ticket.approving_manager
+    p
+      strong> Approving Manager:
+      = @ticket.approving_manager.name
+    p
+      strong> Manager Approved At:
+      = @ticket.manager_approved_at
+  - if @ticket.approving_executive
+    p
+      strong> Approving Executive:
+      = @ticket.approving_executive.name
+    p
+      strong> Executive Approved At:
+      = @ticket.executive_approved_at

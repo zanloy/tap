@@ -44,8 +44,8 @@ gem 'bootstrap-social-rails'
 gem 'will_paginate', '~> 3.0.5'
 # Allow for delayed jobs
 gem 'delayed_job_active_record'
-# Use CanCan for role based access
-gem 'cancan'
+# Use CanCanCan for role based access
+gem 'cancancan'
 # Generates simple forms (bootstrap compatible)
 gem 'simple_form'
 # Use Cocoon for some jquery form type shit

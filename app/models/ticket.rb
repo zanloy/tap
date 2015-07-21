@@ -3,7 +3,7 @@ class Ticket < ActiveRecord::Base
   PRIORITIES = %w[low normal urgent]
 
   after_create :send_notification
-  after_save :notify_assignee, :set_state
+  after_save :set_approval_state
 
   # Associations
   belongs_to :project
@@ -22,7 +22,7 @@ class Ticket < ActiveRecord::Base
   validates_numericality_of :priority, only_integer: true, on: :create
 
   # Scopes
-  scope :open,               -> { with_states(:open).order(priority: :desc, created_at: :desc) }
+  scope :open,               -> { with_states([:unassigned, :assigned]).order(priority: :desc, created_at: :desc) }
   scope :closed,             -> { with_states(:closed).order(closed_at: :desc) }
   scope :awaiting_manager,   -> { with_states(:awaiting_manager).order(:updated_at) }
   scope :awaiting_executive, -> { with_states(:awaiting_executive).order(:updated_at) }
@@ -31,38 +31,85 @@ class Ticket < ActiveRecord::Base
 
   self.per_page = 15
 
-  state_machine initial: :initialized do
+  state_machine initial: :unassigned do
 
-    after_transition all => :awaiting_manager do
-      puts "Awaiting manager approval."
+    # Dealing with the :assigned state
+    before_transition any => :assigned do |ticket, transition|
+      ticket.assignee = transition.args.first or return false
     end
 
-    after_transition all => :awaiting_executive do
-      puts "Awaiting executive approval."
+    after_transition any => :assigned do |ticket, transition|
+      TicketMailer.assignment_email(ticket).deliver_later
     end
 
-    after_transition :open => :closed do
-      puts "Closed from open."
+    # Dealing with the :awaiting_manager state
+    after_transition all => :awaiting_manager do |ticket|
+      TicketMailer.approval_email(ticket).deliver_later
     end
 
-    after_transition :awaiting_executive => :closed do
-      puts "Email finance."
+    # Dealing with the :awaiting_executive state
+    before_transition :awaiting_manager => :awaiting_executive do |ticket, transition|
+      ticket.approving_manager = transition.args.first or return false
+      ticket.manager_approved_at = Time.zone.now
     end
 
-    event :set_state do
-      transition [:initialized, :open] => :awaiting_manager, if: :has_purchases?
-      transition [:awaiting_manager, :awaiting_executive] => :closed, if: :approving_executive
-      transition :awaiting_manager => :awaiting_executive, if: :approving_manager
-      transition :initialized => :open
+    after_transition all => :awaiting_executive do |ticket|
+      TicketMailer.approval_email(ticket).deliver_later
+    end
+
+    # Dealing with the :closed state
+    before_transition [:awaiting_manager, :awaiting_executive] => :closed do |ticket, transition|
+      return false if transition.args.first == nil
+      if transition.from.to_sym == :awaiting_manager
+        ticket.approving_manager = transition.args.first
+        ticket.manager_approved_at = Time.zone.now
+      end
+      ticket.approving_executive = transition.args.first
+      ticket.executive_approved_at = Time.zone.now
+    end
+
+    after_transition [:awaiting_manager, :awaiting_executive] => :closed do |ticket|
+      TicketMailer.finance_email(ticket).deliver_later
+    end
+
+    before_transition any => :closed do |ticket, transition|
+      ticket.closed_by = transition.args.first or return false
+      ticket.closed_at = Time.zone.now
+    end
+
+    event :assign_to do
+      transition any => :assigned
+    end
+
+    event :request_manager_approval do
+      transition [:unassigned, :assigned] => :awaiting_manager
+    end
+
+    event :manager_approve do
+      transition :awaiting_manager => :awaiting_executive
+    end
+
+    event :executive_approve do
+      transition [:awaiting_manager, :awaiting_executive] => :closed
+    end
+
+    event :close do
+      transition [:unassigned, :assigned] => :closed, unless: :has_purchases?
+      transition :awaiting_executive => :closed
+    end
+
+    event :reopen do
+      transition :closed => :assigned, if: :assignee
+      transition :closed => :unassigned
     end
 
     # States
-    state :initialized, human_name: 'Initialized'
-    state :open, human_name: 'Open'
-    state :awaiting_manager, human_name: 'Awaiting Manager Approval'
-    state :awaiting_executive, human_name: 'Awaiting Executive Approval'
-    state :closed, human_name: 'Closed'
-    state :archived, human_name: 'Archived'
+    state :unassigned
+    state :assigned
+    state :awaiting_manager
+    state :awaiting_executive
+    state :closed
+    state :archived
   end
 
   # Methods
@@ -88,7 +135,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def has_purchases?
-    purchases.count > 0 ? true : false
+    purchases_count > 0 ? true : false
   end
 
   def total_items
@@ -109,13 +156,6 @@ class Ticket < ActiveRecord::Base
     return total
   end
 
-#  def can_close?
-#    return unless has_purchases?
-#    if approving_manager.nil?
-#      errors.add(:closed, 'Tickets with purchases must be approved before they can be closed.')
-#    end
-#  end
-
   def flag_color
     case
     when state_name == :archived
@@ -135,31 +175,21 @@ class Ticket < ActiveRecord::Base
     define_method("#{meth}?") { priority == index }
   end
 
-#  def requires_approval?
-#    if purchases_count == 0
-#      return false
-#    else
-#      return true
-#    end
-#  end
-
-#  def requires_manager_approval?
-#    return false unless requires_approval?
-#    if approving_manager_id == nil
-#      return true
-#    else
-#      return false
-#    end
-#  end
-
-#  def requires_executive_approval?
-#    return false unless requires_approval?
-#    if approving_manager_id != nil && approving_executive_id == nil
-#      return true
-#    else
-#      return false
-#    end
-#  end
+  def set_approval_state
+    if has_purchases?
+      request_manager_approval if approving_manager.nil?
+    else
+      approving_manager = nil
+      manager_approved_at = nil
+      approving_executive = nil
+      executive_approved_at = nil
+      if assignee
+        state = :assigned
+      else
+        state = :unassigned
+      end
+    end
+  end
 
   private
 
@@ -167,16 +197,4 @@ class Ticket < ActiveRecord::Base
     ProjectMailer.new_ticket(self).deliver_later
   end
 
-  # TODO: implement or remove
-  def send_requires_approval_notification
-    if purchase_count_changed? || approving_manager_id_changed?
-      ProjectMailer.requires_approval(self).delivery_later
-    end
-  end
-
-  def notify_assignee
-    if assignee_id_changed? and assignee_id != nil
-      TicketMailer.assignment_email(self).deliver_later
-    end
-  end
 end
