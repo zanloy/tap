@@ -3,7 +3,7 @@ class Ticket < ActiveRecord::Base
   PRIORITIES = %w[low normal urgent]
 
   after_create :send_notification
-  after_save :set_approval_state
+  after_save :set_approval_state, :check_if_unassigned
 
   # Associations
   belongs_to :project
@@ -75,6 +75,10 @@ class Ticket < ActiveRecord::Base
     before_transition any => :closed do |ticket, transition|
       ticket.closed_by = transition.args.first or return false
       ticket.closed_at = Time.zone.now
+    end
+
+    event :unassign do
+      transition :assigned => :unassigned
     end
 
     event :assign_to do
@@ -173,6 +177,10 @@ class Ticket < ActiveRecord::Base
 
   PRIORITIES.each_with_index do |meth, index|
     define_method("#{meth}?") { priority == index }
+  end
+
+  def check_if_unassigned
+    unassign if state_name == :assigned and assignee.nil?
   end
 
   def set_approval_state
