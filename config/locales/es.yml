@@ -1,0 +1,12 @@
+es:
+  activerecord:
+    state_machines:
+      ticket:
+        state:
+          states:
+            unassigned: 'No asignado'
+            assigned: 'Asignado'
+            awaiting_manager: 'A la espera de la aprobación'
+            awaiting_executive: 'A la espera de la aprobación'
+            closed: 'Cerrado'
+            archived: 'Archivado'
