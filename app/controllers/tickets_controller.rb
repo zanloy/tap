@@ -3,6 +3,8 @@ class TicketsController < ApplicationController
   before_action :set_ticket, except: [:create, :new]
   before_action :set_crumbs
 
+  load_and_authorize_resource
+
   # GET /tickets
   # GET /tickets.json
   def index
@@ -31,7 +33,6 @@ class TicketsController < ApplicationController
     @ticket = @project.tickets.new(ticket_params)
     @ticket.reporter = @current_user
 
-    logger.debug @ticket.inspect
     respond_to do |format|
       if @ticket.save
         format.html { redirect_to @ticket, notice: 'Ticket was successfully created.' }
@@ -58,6 +59,18 @@ class TicketsController < ApplicationController
     end
   end
 
+  def self_assign
+    respond_to do |format|
+      if @ticket.assign_to(@current_user)
+        format.html { redirect_to @ticket, notice: 'You have been assigned this ticket.' }
+        format.json { render :show, status: :ok, location: @ticket }
+      else
+        format.html { redirect_to @ticket, alert: 'Failed to assign ticket.' }
+        format.json { render json: { error: 'Failed to assign ticket.' }, status: :unprocessable_entity }
+      end
+    end
+  end
+
   # DELETE /tickets/1
   # DELETE /tickets/1.json
   def destroy
@@ -71,10 +84,7 @@ class TicketsController < ApplicationController
   def close
     respond_to do |format|
       if can? :close, @ticket
-        @ticket.closed = true
-        @ticket.closed_by = @current_user
-        @ticket.closed_at = Time.zone.now
-        if @ticket.save
+        if @ticket.close(@current_user)
           format.html { redirect_to @ticket, notice: 'Ticket closed.' }
         else
           alert_text = @ticket.errors.messages.map { |k,v| v }.flatten.join(' ')
@@ -86,34 +96,25 @@ class TicketsController < ApplicationController
     end
   end
 
+  def reopen
+    respond_to do |format|
+      if @ticket.reopen
+        format.html { redirect_to @ticket, notice: 'Ticket has been reopened.' }
+      else
+        alert_text = @ticket.errors.messages.map { |k,v| v }.flatten.join(' ')
+        format.html { redirect_to @ticket, alert: alert_text }
+      end
+    end
+  end
+
   def approve
     respond_to do |format|
       unless can? :approve, @ticket
         format.html { redirect_to ticket_path(@ticket), alert: 'You do not have access to do that.' }
       end
-      if can? :manager_approve, @ticket and @ticket.approving_manager.nil?
-        @ticket.approving_manager = @current_user
-        @ticket.manager_approved_at = Time.zone.now
-        @ticket.locked = true
-      end
-      if can? :executive_approve, @ticket and @ticket.approving_executive.nil?
-        @ticket.approving_executive = @current_user
-        @ticket.executive_approved_at = Time.zone.now
-        @ticket.closed = true
-        @ticket.closed_by = @current_user
-        @ticket.closed_at = Time.zone.now
-      end
-
-      if @ticket.save
-        if @ticket.executive_approved?
-          TicketMailer.finance_email(@ticket).deliver_later
-        else
-          TicketMailer.approval_email(@ticket).deliver_later
-        end
+        @ticket.manager_approve(@current_user) if can? :manager_approve, @ticket and @ticket.approving_manager.nil?
+        @ticket.executive_approve(@current_user) if can? :executive_approve, @ticket and @ticket.approving_executive.nil?
         format.html { redirect_to ticket_path(@ticket), notice: 'Ticket approved.' }
-      else
-        format.html { redirect_to ticket_path(@ticket), alert: 'Failed to save your approval.' }
-      end
     end
   end
 
@@ -131,11 +132,13 @@ class TicketsController < ApplicationController
 
   def set_crumbs
     @crumbs = [ { text: 'Projects', link_to: projects_path } ]
-    @crumbs << { text: @ticket.project.name, link_to: project_path(@ticket.project) } if @ticket
-    @crumbs << { text: @ticket.title } if @ticket
+    if @ticket
+      @crumbs << { text: @ticket.project.name, link_to: project_path(@ticket.project) }
+      @crumbs << { text: @ticket.title }
+    end
   end
 
   def ticket_params
-    params.require(:ticket).permit(:title, :description, :priority, :closed, :archived, :assignee_id, purchases_attributes: [:id, :name, :url, :quantity, :cost, :_destroy])
+    params.require(:ticket).permit(:priority, :title, :description, :assignee_id, purchases_attributes: [:id, :name, :url, :quantity, :cost, :_destroy])
   end
 end

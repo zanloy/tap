@@ -5,6 +5,7 @@ class CreateProjects < ActiveRecord::Migration
       t.string :description
       t.string :icon
       t.boolean :private, default: false
+      t.string :notification_email
       t.belongs_to :auto_assignee, class_name: :user
       t.boolean :show_in_navbar, default: false
 

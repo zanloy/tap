@@ -12,7 +12,7 @@ RSpec.describe "tickets/show", type: :view do
   end
 
   it 'renders the ticket attributes' do
-    expect(rendered).to match(/Status:/)
+    expect(rendered).to match(/State:/)
     expect(rendered).to match(/Priority:/)
     expect(rendered).to match(/Description:/)
     expect(rendered).to match(/Reporter:/)
@@ -20,7 +20,7 @@ RSpec.describe "tickets/show", type: :view do
   end
 
   it 'renders the ticket values' do
-    expect(rendered).to match(@ticket.status)
+    expect(rendered).to match(@ticket.human_state_name)
     expect(rendered).to match(@ticket.priority_name)
     expect(rendered).to match(@ticket.description)
     expect(rendered).to match(@ticket.reporter.name)

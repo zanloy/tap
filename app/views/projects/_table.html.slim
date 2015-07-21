@@ -12,7 +12,7 @@
       - if ticket.assignee
         .i.glyphicon.glyphicon-wrench>
         ' #{ticket.assignee.name_or_email}
-      - if ticket.closed
+      - unless ticket.closed_by.nil?
         .i.glyphicon.glyphicon-lock>
         ' #{ticket.closed_by.name_or_email}
   hr

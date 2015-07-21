@@ -7,18 +7,18 @@ class TicketMailer < ApplicationMailer
   end
 
   def approval_email(ticket)
-    return false if ticket.closed? or !ticket.has_purchases?
     @ticket = ticket
 
-    if @ticket.manager_approved?
+    if @ticket.state_name == :awaiting_executive
       send_to = User.where(executive: true)
-    else
-      send_to = @project.memberships.where(role: Membership.role_index(:manager))
+    elsif @ticket.state_name == :awaiting_manager
+      manager_ids = @ticket.project.memberships.where(role: Membership.role_index(:manager)).pluck(:id)
+      send_to = User.where(id: manager_ids)
     end
 
     unless send_to.nil?
       send_to.each do |user|
-        mail(to: user.email, subject: "Ticket ##{@ticket.id} requires your approval.")
+        mail(to: user.email, subject: "Ticket ##{@ticket.id} requires approval.")
       end
     end
   end

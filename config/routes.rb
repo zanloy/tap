@@ -5,7 +5,9 @@ Rails.application.routes.draw do
   resources :projects, path: '/p' do
     get 'closed', as: 'closed'
     resources :tickets, path: '/t', shallow: true do
+      get 'self_assign', as: 'self_assign'
       get 'close', as: 'close'
+      get 'reopen', as: 'reopen'
       get 'approve', as: 'approve'
       resources :comments, path: '/c', only: :create
     end

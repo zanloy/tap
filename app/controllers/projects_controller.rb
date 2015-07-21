@@ -1,13 +1,14 @@
 class ProjectsController < ApplicationController
 
-  load_and_authorize_resource except: :create
-  before_action :set_project, only: [:show, :edit, :update, :destroy, :closed]
+  before_action :set_project, except: [:new, :create]
   before_action :set_crumbs
+
+  load_and_authorize_resource
 
   # GET /projects
   # GET /projects.json
   def index
-    @projects = Project.all.not_private
+    @projects = Project.all.not_private.order(:name)
   end
 
   # GET /projects/1

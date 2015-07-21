@@ -4,6 +4,8 @@ class CreateUsers < ActiveRecord::Migration
       t.string :email, null: false
       t.string :name
       t.integer :role, default: 0
+      t.boolean :executive, default: false
+      t.integer :comments_count, default: 0
       t.string :provider
       t.string :uid
       t.string :oauth_token

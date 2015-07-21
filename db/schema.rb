@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150719020528) do
+ActiveRecord::Schema.define(version: 20150519142046) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,11 +60,11 @@ ActiveRecord::Schema.define(version: 20150719020528) do
     t.string   "description"
     t.string   "icon"
     t.boolean  "private",            default: false
+    t.string   "notification_email"
     t.integer  "auto_assignee_id"
     t.boolean  "show_in_navbar",     default: false
     t.datetime "created_at",                         null: false
     t.datetime "updated_at",                         null: false
-    t.string   "notification_email"
   end
 
   create_table "purchases", force: :cascade do |t|
@@ -80,25 +80,23 @@ ActiveRecord::Schema.define(version: 20150719020528) do
   add_index "purchases", ["ticket_id"], name: "index_purchases_on_ticket_id", using: :btree
 
   create_table "tickets", force: :cascade do |t|
-    t.integer  "project_id",                             null: false
-    t.integer  "reporter_id",                            null: false
+    t.integer  "project_id",                                    null: false
+    t.integer  "reporter_id",                                   null: false
     t.integer  "assignee_id"
-    t.boolean  "closed",                 default: false
-    t.boolean  "archived",               default: false
+    t.string   "state",                  default: "unassigned"
     t.integer  "priority",               default: 1
-    t.string   "title",                                  null: false
+    t.string   "title",                                         null: false
     t.text     "description"
+    t.integer  "purchases_count",        default: 0
+    t.integer  "comments_count",         default: 0
     t.integer  "closed_by_id"
     t.datetime "closed_at"
     t.integer  "approving_manager_id"
     t.datetime "manager_approved_at"
     t.integer  "approving_executive_id"
     t.datetime "executive_approved_at"
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
-    t.boolean  "locked",                 default: false
-    t.integer  "purchases_count"
-    t.integer  "comments_count"
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
   end
 
   add_index "tickets", ["assignee_id"], name: "index_tickets_on_assignee_id", using: :btree
@@ -109,14 +107,14 @@ ActiveRecord::Schema.define(version: 20150719020528) do
     t.string   "email",                            null: false
     t.string   "name"
     t.integer  "role",             default: 0
+    t.boolean  "executive",        default: false
+    t.integer  "comments_count",   default: 0
     t.string   "provider"
     t.string   "uid"
     t.string   "oauth_token"
     t.datetime "oauth_expires_at"
     t.datetime "created_at",                       null: false
     t.datetime "updated_at",                       null: false
-    t.boolean  "executive",        default: false
-    t.integer  "comments_count"
   end
 
   add_foreign_key "comments", "tickets"
