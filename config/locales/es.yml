@@ -7,16 +7,17 @@ es:
           states:
             archived: Archivado
             assigned: Asignado
-            awaiting_executive: A la espera de la aprobación
-            awaiting_manager: A la espera de la aprobación
+            awaiting_executive: Esperando en la aprobación
+            awaiting_manager: Esperando en la aprobación
             closed: Cerrado
             unassigned: No asignado
-  add_new_project: Agregar Nuevo Proyecto
+  add_new_project: Agregar un Proyecto Nuevo
+  add_purchase_item: Añadir Compra
   approvals: Homologaciones
   assigned_to: Cesionario
   closed_at: Cerrado a
   closed_by: Cerrado por
-  closed_tickets: Entradas Cerradas
+  closed_tickets: Boletos Cerradas
   comment: Comentario
   comments: Comentarios
   cost: Costo
@@ -24,13 +25,23 @@ es:
   created_at: Creado el
   date: Fecha
   dates: Fechas
+  delete_project: Eliminar Proyecto
   description: Descripción
   details: Detalles
+  edit_project: Edición Proyecto
+  edit_ticket: Edición Boleto
   executive: Ejecutivo
+  helpers:
+    submit:
+      ticket:
+        create: Crear
+        update: Salvar
   manager: Gerente
   members: Miembros
   name: Nombre
-  open_tickets: Entradas Abiertas
+  new_ticket: Boleto Nuevo
+  open_ticket: Abrir un Boleto
+  open_tickets: Boletos Abiertas
   people: Personas
   priority: Prioridad
   purchases: Compras
@@ -39,11 +50,28 @@ es:
   simple_form:
     error_notification:
       default_message: 'Por favor revise los problemas de abajo:'
+    'false': 'No'
+    labels:
+      defaults:
+        cost: Costo
+        description: Descripción
+        name: Nombre
+        priority: Prioridad
+        quantity: Cantidad
+        title: Título
     'no': 'No'
     required:
       mark: "*"
       text: necesario
-    'yes': Sí
+    'true': Sí
+    'yes': 'Sí'
   state: Estado
+  tap_projects: Proyectos de TAP
+  title: Título
   total: Total
+  update_ticket: Salvar Boleto
   updated_at: Actualizado a
+  view_all: Ver Todo
+  will_paginate:
+    next_label: Próximo
+    previous_label: Anterior

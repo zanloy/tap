@@ -6,14 +6,14 @@
     = f.select :priority, options_for_select(Ticket::PRIORITIES.map.with_index {|v, i| [v, i]}.to_h, selected: @ticket.priority)
     = f.input :title, { autofocus: true }
     = f.input :description, input_html: { rows: 15, placeholder: 'Full Description' }
-    h3 Purchases
+    h3 = t('purchases')
     #purchases
       = f.simple_fields_for :purchases do |purchase|
         = render 'purchase_fields', f: purchase
       .links
         = link_to_add_association f, :purchases, class: 'btn btn-default btn-xs', id: 'add_purchases' do
           i.glyphicon.glyphicon-plus>
-          ' Add Purchase Item
+          = t('add_purchase_item')
     br
 
   .form-actions

@@ -11,11 +11,13 @@ en:
             awaiting_manager: Awaiting Manager Approval
             closed: Closed
             unassigned: Unassigned
-  add_new_project: 'Add New Project'
+  add_new_project: Add New Project
+  add_purchase_item: Add Purchase Item
   approvals: Approvals
   assigned_to: Assigned To
   closed_at: Closed at
-  closed_by: Closed By
+  closed_by: Closed by
+  closed_tickets: Closed Tickets
   comment: Comment
   comments: Comments
   cost: Cost
@@ -23,11 +25,22 @@ en:
   created_at: Created At
   date: Date
   dates: Dates
+  delete_project: Delete Project
   description: Description
   details: Details
+  edit_project: Edit Project
+  edit_ticket: Edit Ticket
   executive: Executive
+  helpers:
+    submit:
+      ticket:
+        create: Create
+        update: Save
   manager: Manager
+  members: Members
   name: Name
+  new_ticket: New Ticket
+  open_ticket: Open Ticket
   open_tickets: Open Tickets
   people: People
   priority: Priority
@@ -37,11 +50,28 @@ en:
   simple_form:
     error_notification:
       default_message: 'Please review the problems below:'
+    'false': 'No'
+    labels:
+      defaults:
+        cost: Cost
+        description: Description
+        name: Name
+        priority: Priority
+        quantity: Quantity
+        title: Title
     'no': 'No'
     required:
       mark: "*"
       text: required
+    'true': 'Yes'
     'yes': 'Yes'
   state: State
+  tap_projects: TaP Projects
+  title: Title
   total: Total
-  updated_at: Updated At
+  update_ticket: Update Ticket
+  updated_at: Updated at
+  view_all: View All
+  will_paginate:
+    next_label: Next
+    previous_label: Previous
