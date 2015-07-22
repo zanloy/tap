@@ -64,12 +64,10 @@ es:
       mark: "*"
       text: necesario
     'true': Sí
-    'yes': 'Sí'
+    'yes': Sí
   state: Estado
   tap_projects: Proyectos de TAP
-  title: Título
   total: Total
-  update_ticket: Salvar Boleto
   updated_at: Actualizado a
   view_all: Ver Todo
   will_paginate:

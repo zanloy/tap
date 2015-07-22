@@ -20,7 +20,7 @@ RSpec.feature 'User Tasks', type: :feature do
       fill_in 'ticket_title', with: 'This is my user ticket.'
       select 'normal', from: 'ticket_priority'
       fill_in 'ticket_description', with: 'Ticket description.'
-      click_on 'Create Ticket'
+      click_on 'Create'
       assert has_content? 'success'
       assert has_content? 'This is my user ticket.'
       assert has_content? 'Ticket description.'

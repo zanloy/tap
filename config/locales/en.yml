@@ -67,9 +67,7 @@ en:
     'yes': 'Yes'
   state: State
   tap_projects: TaP Projects
-  title: Title
   total: Total
-  update_ticket: Update Ticket
   updated_at: Updated at
   view_all: View All
   will_paginate:
