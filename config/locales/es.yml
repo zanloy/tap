@@ -1,65 +1,49 @@
+---
 es:
   activerecord:
     state_machines:
       ticket:
         state:
           states:
-            unassigned: 'No asignado'
-            assigned: 'Asignado'
-            awaiting_manager: 'A la espera de la aprobación'
-            awaiting_executive: 'A la espera de la aprobación'
-            closed: 'Cerrado'
-            archived: 'Archivado'
+            archived: Archivado
+            assigned: Asignado
+            awaiting_executive: A la espera de la aprobación
+            awaiting_manager: A la espera de la aprobación
+            closed: Cerrado
+            unassigned: No asignado
+  add_new_project: Agregar Nuevo Proyecto
+  approvals: Homologaciones
+  assigned_to: Cesionario
+  closed_at: Cerrado a
+  closed_by: Cerrado por
+  closed_tickets: Entradas Cerradas
+  comment: Comentario
+  comments: Comentarios
+  cost: Costo
+  count: Contar
+  created_at: Creado el
+  date: Fecha
+  dates: Fechas
+  description: Descripción
+  details: Detalles
+  executive: Ejecutivo
+  manager: Gerente
+  members: Miembros
+  name: Nombre
+  open_tickets: Entradas Abiertas
+  people: Personas
+  priority: Prioridad
+  purchases: Compras
+  reported_by: Reportado por
+  signed_in_as: Conectado Como
   simple_form:
-    "yes": 'Sí'
-    "no": 'No'
-    required:
-      text: 'necesario'
-      mark: '*'
-      # You can uncomment the line below if you need to overwrite the whole required html.
-      # When using html, text and mark won't be used.
-      # html: '<abbr title="required">*</abbr>'
     error_notification:
       default_message: 'Por favor revise los problemas de abajo:'
-    # Examples
-    # labels:
-    #   defaults:
-    #     password: 'Password'
-    #   user:
-    #     new:
-    #       email: 'E-mail to sign in.'
-    #     edit:
-    #       email: 'E-mail.'
-    # hints:
-    #   defaults:
-    #     username: 'User name to sign in.'
-    #     password: 'No special characters, please.'
-    # include_blanks:
-    #   defaults:
-    #     age: 'Rather not say'
-    # prompts:
-    #   defaults:
-    #     age: 'Select your age'
-  details: 'Detalles'
-  state: 'Estado'
-  priority: 'Prioridad'
-  description: 'Descripción'
-  purchases: 'Compras'
-  name: 'Nombre'
-  count: 'Contar'
-  cost: 'Costo'
-  total: 'Total'
-  comments: 'Comentarios'
-  comment: 'Comentario'
-  people: 'Personas'
-  reported_by: 'Reportado por'
-  assigned_to: 'Cesionario'
-  closed_by: 'Cerrado por'
-  dates: 'Fechas'
-  created_at: 'Creado el'
-  updated_at: 'Actualizado a'
-  closed_at: 'Cerrado a'
-  approvals: 'Homologaciones'
-  manager: 'Gerente'
-  date: 'Fecha'
-  executive: 'Ejecutivo'
+    'no': 'No'
+    required:
+      mark: "*"
+      text: necesario
+    'yes': Sí
+  state: Estado
+  total: Total
+  updated_at: Actualizado a

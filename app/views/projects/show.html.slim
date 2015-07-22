@@ -7,13 +7,13 @@ h1
   = @project.name
 
 ul.nav.nav-tabs
-  li.active = link_to 'Open Tickets', '#open', data: { toggle: 'tab' }
+  li.active = link_to t('open_tickets'), '#open', data: { toggle: 'tab' }
   - unless @awaiting_manager.empty?
     li = link_to 'Awaiting Manager Approval', '#awaiting_manager', data: { toggle: 'tab' }
   - unless @awaiting_executive.empty?
     li = link_to 'Awaiting Executive Approval', '#awaiting_executive', data: { toggle: 'tab' }
-  li = link_to 'Closed Tickets', '#closed', data: { toggle: 'tab' }
-  li = link_to 'Members', '#members', data: { toggle: 'tab' }
+  li = link_to t('closed_tickets'), '#closed', data: { toggle: 'tab' }
+  li = link_to t('members'), '#members', data: { toggle: 'tab' }
 br
 
 .tab-content

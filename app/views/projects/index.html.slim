@@ -1,7 +1,7 @@
 h1
   - if can? :manage, Project
     .pull-right
-      = button_to 'Add New Project', new_project_path, { method: :get, class: 'btn btn-primary' }
+      = button_to t('add_new_project'), new_project_path, { method: :get, class: 'btn btn-primary' }
   ' TaP Projects
 #projects
   ul.list-unstyled
