@@ -52,8 +52,9 @@ class Ability
     # Membership has it's benefits.
     user.memberships.each do |membership|
       if membership.role? :worker
-        can :work, Ticket, project: membership.project
+        can :close, Ticket, project: membership.project, state_name: :assigned, assignee: user
         can :self_assign, Ticket, project: membership.project, state_name: [:unassigned, :assigned]
+        can :reopen, Ticket, project: membership.project, state_name: :closed, closed_by: user
       end
       if membership.role? :moderator
         can [:update, :edit, :moderate, :close, :destroy], Ticket, project: membership.project, state_name: [:unassigned, :assigned, :awaiting_manager]

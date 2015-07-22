@@ -35,7 +35,9 @@ class Ticket < ActiveRecord::Base
 
     # Dealing with the :assigned state
     before_transition any => :assigned do |ticket, transition|
-      ticket.assignee = transition.args.first or return false
+      if ticket.assignee.nil?
+        ticket.assignee = transition.args.first or return false
+      end
     end
 
     after_transition any => :assigned do |ticket, transition|
@@ -75,6 +77,12 @@ class Ticket < ActiveRecord::Base
     before_transition any => :closed do |ticket, transition|
       ticket.closed_by = transition.args.first or return false
       ticket.closed_at = Time.zone.now
+      TicketMailer.closed_email(ticket).deliver_later
+    end
+
+    before_transition :closed => any - [:archived] do |ticket|
+      ticket.closed_by = nil
+      ticket.closed_at = nil
     end
 
     event :unassign do

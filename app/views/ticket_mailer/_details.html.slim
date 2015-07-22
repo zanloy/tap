@@ -12,6 +12,14 @@ p
   strong> Description:
   = @ticket.description
 
+- if @ticket.closed_by
+  p
+    strong> Closed by:
+    = @ticket.closed_by.name
+  p
+    strong> Closed at:
+    = @ticket.closed_at
+
 - if @ticket.has_purchases?
   table
     thead
