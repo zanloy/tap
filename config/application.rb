@@ -31,5 +31,11 @@ module Tap
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
+
+    # Used to include componenets installed by bower
+    config.assets.paths << Rails.root.join('vendor', 'assets', 'components')
+    
+    # Added as recommendation of github/octicons
+    config.assets.precompile += %w(*.svg *.eot *.woff *.ttf)
   end
 end

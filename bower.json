@@ -1,0 +1,6 @@
+{
+  "name": "tap",
+  "dependencies": {
+    "octicons": "*"
+  }
+}

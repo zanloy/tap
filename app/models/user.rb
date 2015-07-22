@@ -7,6 +7,7 @@ class User < ActiveRecord::Base
   has_many :projects, through: :memberships
   has_many :tickets, foreign_key: :reporter_id
   has_many :comments
+  has_many :subscriptions, dependent: :delete_all
 
   # Validation
   validates_presence_of :email, :name
@@ -39,5 +40,5 @@ class User < ActiveRecord::Base
     return name unless name.nil?
     return email
   end
-  
+
 end

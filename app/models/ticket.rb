@@ -14,6 +14,7 @@ class Ticket < ActiveRecord::Base
   belongs_to :approving_executive, class_name: User
   has_many :purchases, dependent: :delete_all
   has_many :comments, dependent: :delete_all
+  has_many :subscriptions, dependent: :delete_all
 
   accepts_nested_attributes_for :purchases, reject_if: :all_blank, allow_destroy: true
 
