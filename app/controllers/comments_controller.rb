@@ -8,12 +8,20 @@ class CommentsController < ApplicationController
     parameters[:user_id] = @current_user.id
     comment = @ticket.comments.build(parameters)
     if comment.save
+      # If you comment, you subscribe
+      begin
+        if Subscription.where(user: @current_user, ticket: @ticket).count < 1
+          Subscription.create(user: @current_user, ticket: @ticket).save!
+        end
+      rescue
+      end
+      # If you hit :comment_and_close then we should close the ticket.
       if close_ticket? and can? :close, @ticket
         @ticket.close(@current_user)
       end
+      # Email everyone who is subscribed to this ticket.
       @ticket.subscriptions.each do |subscription|
         TicketMailer.new_comment_email(subscription.user.email, comment).deliver_later
-        puts "subscription.user.email = #{subscription.user.email}"
       end
       redirect_to @ticket
     else

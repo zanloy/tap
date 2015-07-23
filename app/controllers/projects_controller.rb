@@ -14,15 +14,15 @@ class ProjectsController < ApplicationController
   # GET /projects/1
   # GET /projects/1.json
   def show
-    @open_tickets = @project.tickets.open.page(page_param)
-    @awaiting_manager = @project.tickets.awaiting_manager
-    @awaiting_executive = @project.tickets.awaiting_executive
-    @closed_tickets = @project.tickets.closed.page(1)
+    @open_tickets = @project.tickets.open.accessible_by(current_ability).page(page_param)
+    @awaiting_manager = @project.tickets.accessible_by(current_ability).awaiting_manager
+    @awaiting_executive = @project.tickets.accessible_by(current_ability).awaiting_executive
+    @closed_tickets = @project.tickets.accessible_by(current_ability).closed.page(1)
     @memberships = @project.memberships
   end
 
   def closed
-    @closed_tickets = @project.tickets.closed.page(page_param)
+    @closed_tickets = @project.tickets.closed.accessible_by(current_ability).page(page_param)
   end
 
   # GET /projects/new

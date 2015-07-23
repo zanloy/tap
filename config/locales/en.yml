@@ -26,6 +26,7 @@ en:
   created_at: Created at
   date: Date
   dates: Dates
+  delete: Delete
   delete_project: Delete Project
   description: Description
   details: Details

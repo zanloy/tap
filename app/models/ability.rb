@@ -32,7 +32,8 @@ class Ability
     # Public things.
     can :read, User, id: user.id
     can [:read, :closed], Project, private: false
-    can [:new, :create, :read, :subscribe, :unsubscribe], Ticket
+    can [:new, :create, :subscribe, :unsubscribe], Ticket
+    can [:read], Ticket, reporter: user
 
     # Admin stuff.
     if user.role? :manager
@@ -48,12 +49,15 @@ class Ability
     # User's can control their own destiny!
     can [:edit, :update, :close], Ticket, reporter: user, state_name: [:unassigned, :assigned]
     can :reopen, Ticket, reporter: user, closed_by: user, state_name: :closed
+    can :destroy, Comment, user: user
 
     # Membership has it's benefits.
     user.memberships.each do |membership|
       if membership.role? :worker
+        can :read, Ticket, project: membership.project
         can :close, Ticket, project: membership.project, state_name: :assigned, assignee: user
         can :self_assign, Ticket, project: membership.project, state_name: [:unassigned, :assigned]
+        cannot :self_assign, Ticket, project: membership.project, state_name: :assigned, assignee: user
         can :reopen, Ticket, project: membership.project, state_name: :closed, closed_by: user
       end
       if membership.role? :moderator

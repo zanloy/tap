@@ -3,6 +3,9 @@ p
   = link_to @ticket.project.name, project_url(@ticket.project)
 
 p
+  strong> Reporter:
+  = mail_to @ticket.reporter.email, @ticket.reporter.name
+p
   strong> Title:
   = link_to @ticket.title, ticket_url(@ticket)
 p

@@ -102,6 +102,12 @@
               small = comment.created_at.strftime("%D %I:%M%P")
         .col-md-9
           = simple_format(comment.comment)
+      - if can? :destroy, comment
+        .row
+          .col-md-12.text-right
+            = link_to comment_path(comment), method: :delete, class: 'btn btn-sm' do
+              i.octicon.octicon-trashcan
+              = t('delete')
     .row
       .col-md-offset-3.col-md-9
         = simple_form_for [@ticket, Comment.new] do |f|
