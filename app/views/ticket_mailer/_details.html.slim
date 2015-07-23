@@ -18,7 +18,7 @@ p
     = @ticket.closed_by.name
   p
     strong> Closed at:
-    = @ticket.closed_at
+    = @ticket.closed_at.strftime('%D %I:%M%P')
 
 - if @ticket.has_purchases?
   table
@@ -44,11 +44,11 @@ p
       = @ticket.approving_manager.name
     p
       strong> Manager Approved At:
-      = @ticket.manager_approved_at
+      = @ticket.manager_approved_at.strftime('%D %I:%M%P')
   - if @ticket.approving_executive
     p
       strong> Approving Executive:
       = @ticket.approving_executive.name
     p
       strong> Executive Approved At:
-      = @ticket.executive_approved_at
+      = @ticket.executive_approved_at.strftime('%D %I:%M%P')

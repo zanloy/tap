@@ -2,6 +2,10 @@
 .row.actionbar
   .col-md-12
     .pull-right
+      - if can? :self_assign, @ticket
+        => link_to ticket_self_assign_path(@ticket), class: 'btn btn-primary' do
+          i.glyphicon.glyphicon-screenshot>
+          ' Assign to Me
       - if can? :approve, @ticket
         => link_to ticket_approve_path(@ticket), class: 'btn btn-primary', data: { confirm: 'Approve Purchases?', :'confirm-button-text' => 'Approve', text: "This ticket has #{@ticket.total_items} item(s) for #{number_to_currency(@ticket.total_cost)}." } do
           i.glyphicon.glyphicon-ok>
@@ -22,17 +26,13 @@
         => link_to ticket_path(@ticket), class: 'btn btn-danger', data: { method: :delete, confirm: 'Are you sure?', :'confirm-button-text' => 'Delete' } do
           i.glyphicon.glyphicon-trash>
           ' Delete
-    - if can? :self_assign, @ticket
-      => link_to ticket_self_assign_path(@ticket), class: 'btn btn-primary' do
-        i.glyphicon.glyphicon-screenshot>
-        ' Assign to Me
     - if can? :moderate, @ticket
       = simple_form_for @ticket, html: { class: 'form-inline' } do |f|
         => f.label 'Assign to:'
         => f.collection_select :assignee_id, @ticket.project.workers, :user_id, :user_name, include_blank: true
         => f.label 'Priority:'
         => f.select :priority, options_for_select(Ticket::PRIORITIES.map.with_index {|v, i| [v, i]}.to_h, selected: @ticket.priority)
-        => f.submit 'Assign', class: 'btn btn-primary'
+        => f.submit 'Assign', class: 'btn btn-default btn-sm'
 
 .row
   h1
@@ -42,7 +42,7 @@
   .col-md-7
     hr
     h4
-      i.glyphicon.glyphicon-list>
+      i.octicon.octicon-list-unordered>
       = t 'details'
     hr
     .row
@@ -63,7 +63,7 @@
     hr
     - if @ticket.has_purchases?
       h4
-        i.glyphicon.glyphicon-shopping-cart>
+        i.octicon.octicon-credit-card>
         ' #{t('purchases')} (#{number_to_currency(@ticket.total_cost)})
       hr
       .row
@@ -88,7 +88,7 @@
                 td = number_to_currency(purchase.total)
       hr
     h4
-      i.glyphicon.glyphicon-comment>
+      i.octicon.octicon-comment-discussion>
       = t('comments')
     hr
     - for comment in @comments
@@ -111,7 +111,7 @@
   .col-md-5
     hr
     h4
-      i.glyphicon.glyphicon-user>
+      i.octicon.octicon-organization>
       = t('people')
     hr
     .row
@@ -136,7 +136,7 @@
           = @ticket.closed_by.name
     hr
     h4
-      i.glyphicon.glyphicon-calendar>
+      i.octicon.octicon-calendar>
       = t('dates')
     hr
     .row
@@ -162,7 +162,7 @@
     hr
     - if @ticket.has_purchases?
       h4
-        i.glyphicon.glyphicon-ok>
+        i.octicon.octicon-check>
         = t('approvals')
       hr
       .row
@@ -171,22 +171,25 @@
       .row
         .col-md-11.col-md-offset-1
           = @ticket.approving_manager ? @ticket.approving_manager.name : 'Awaiting Approval'
-      .row
-        .col-md-12.text-muted
-          strong #{t('date')}:
-      .row
-        .col-md-11.col-md-offset-1
-          = @ticket.manager_approved_at ? @ticket.manager_approved_at.strftime('%D %I:%M%P') : ''
-      .row
-        .col-md-12.text-muted
-          strong #{t('executive')}:
-      .row
-        .col-md-11.col-md-offset-1
-          = @ticket.approving_executive ? @ticket.approving_executive.name : 'Awaiting Approval'
-      .row
-        .col-md-12.text-muted
-          strong #{t('date')}:
-      .row
-        .col-md-11.col-md-offset-1
-          = @ticket.executive_approved_at ? @ticket.executive_approved_at.strftime('%D %I:%M%P') : ''
+      - if @ticket.manager_approved_at
+        .row
+          .col-md-12.text-muted
+            strong #{t('date')}:
+        .row
+          .col-md-11.col-md-offset-1
+            = @ticket.manager_approved_at ? @ticket.manager_approved_at.strftime('%D %I:%M%P') : ''
+      - if @ticket.approving_manager
+        .row
+          .col-md-12.text-muted
+            strong #{t('executive')}:
+        .row
+          .col-md-11.col-md-offset-1
+            = @ticket.approving_executive ? @ticket.approving_executive.name : 'Awaiting Approval'
+      - if @executive_approved_at
+        .row
+          .col-md-12.text-muted
+            strong #{t('date')}:
+        .row
+          .col-md-11.col-md-offset-1
+            = @ticket.executive_approved_at ? @ticket.executive_approved_at.strftime('%D %I:%M%P') : ''
       hr

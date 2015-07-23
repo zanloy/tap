@@ -7,7 +7,7 @@
     = f.input :notification_email
     = f.input :private
     - if can? :manage_members, @project
-      h3 Members
+      h3 = t('members')
       #memberships
         = f.simple_fields_for :memberships do |membership|
           = render 'membership_fields', f: membership

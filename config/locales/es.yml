@@ -30,6 +30,7 @@ es:
   details: Detalles
   edit_project: Edición Proyecto
   edit_ticket: Edición Boleto
+  editing: Edición
   executive: Ejecutivo
   helpers:
     submit:
@@ -56,7 +57,9 @@ es:
         cost: Costo
         description: Descripción
         name: Nombre
+        notification_email: Correo Electrónico de Notificación
         priority: Prioridad
+        private: Privado
         quantity: Cantidad
         title: Título
     'no': 'No'

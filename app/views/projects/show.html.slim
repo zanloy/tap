@@ -1,9 +1,13 @@
 h1
   .pull-right
-    => button_to t('open_ticket'), new_project_ticket_path(@project), { method: :get, class: 'btn btn-primary' }
+    => button_to new_project_ticket_path(@project), { method: :get, class: 'btn btn-primary' } do
+      i.octicon.octicon-file-text>
+      = t('open_ticket')
     - if can? :edit, @project
       => button_to t('edit_project'), edit_project_path(@project), { method: :get, class: 'btn btn-primary' }
-      => button_to t('delete_project'), project_path(@project), { method: :destroy, class: 'btn btn-danger' }
+      => button_to project_path(@project), { method: :destroy, class: 'btn btn-danger' } do
+        i.octicon.octicon-trashcan>
+        = t('delete_project')
   = @project.name
 
 ul.nav.nav-tabs
@@ -13,7 +17,9 @@ ul.nav.nav-tabs
   - unless @awaiting_executive.empty?
     li = link_to 'Awaiting Executive Approval', '#awaiting_executive', data: { toggle: 'tab' }
   li = link_to t('closed_tickets'), '#closed', data: { toggle: 'tab' }
-  li = link_to t('members'), '#members', data: { toggle: 'tab' }
+  li = link_to '#members', data: { toggle: 'tab' } do
+    i.octicon.octicon-organization>
+    = t('members')
 br
 
 .tab-content
@@ -29,8 +35,6 @@ br
   .tab-pane.fade.in id='closed'
     = render partial: 'table', object: @closed_tickets
     .text-center = link_to t('view_all'), project_closed_path(@project)
-
-
   .tab-pane.fade.in id='members'
     - for membership in @memberships
       .row

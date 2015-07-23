@@ -30,9 +30,9 @@ html
                           /' Admin
                 .nav.navbar-nav.navbar-right
                   p class='navbar-text'
-                    | #{t('signed_in_as')} #{link_to @current_user.name_or_email, user_path(@current_user), class: 'text-muted'}. &nbsp;
+                    | #{t('signed_in_as')} #{link_to @current_user.name_or_email, user_path(@current_user), class: 'text-muted'} &nbsp;
                     = link_to signout_path, class: 'navbar-link' do
-                      == glyphicon :'log-out'
+                      i.octicon.octicon-sign-out
 
         == display_breadcrumbs @crumbs
         == render 'layouts/flash_messages'

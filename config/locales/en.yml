@@ -30,6 +30,7 @@ en:
   details: Details
   edit_project: Edit Project
   edit_ticket: Edit Ticket
+  editing: Editing
   executive: Executive
   helpers:
     submit:
@@ -56,7 +57,9 @@ en:
         cost: Cost
         description: Description
         name: Name
+        notification_email: Notification Email
         priority: Priority
+        private: Private
         quantity: Quantity
         title: Title
     'no': 'No'
