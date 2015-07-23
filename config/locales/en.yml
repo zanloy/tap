@@ -19,6 +19,7 @@ en:
   closed_by: Closed by
   closed_tickets: Closed Tickets
   comment: Comment
+  comment_and_close: Comment and Close
   comments: Comments
   cost: Cost
   count: Count
@@ -46,7 +47,7 @@ en:
   people: People
   priority: Priority
   purchases: Purchases
-  reported_by: Reported By
+  reported_by: Reported by
   signed_in_as: Signed in as
   simple_form:
     error_notification:

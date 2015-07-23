@@ -12,10 +12,10 @@ RSpec.describe "tickets/show", type: :view do
   end
 
   it 'renders the ticket attributes' do
-    expect(rendered).to match(/State:/)
-    expect(rendered).to match(/Priority:/)
-    expect(rendered).to match(/Description:/)
-    expect(rendered).to match(/Reported By:/)
+    expect(rendered).to have_content(/State:/)
+    expect(rendered).to have_content(/Priority:/)
+    expect(rendered).to have_content(/Description:/)
+    expect(rendered).to have_content(/Reported by:/)
   end
 
   it 'renders the ticket values' do

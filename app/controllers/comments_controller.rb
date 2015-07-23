@@ -8,9 +8,12 @@ class CommentsController < ApplicationController
     parameters[:user_id] = @current_user.id
     comment = @ticket.comments.build(parameters)
     if comment.save
-      redirect_to :back, notice: 'Comment saved.'
+      if close_ticket? and can? :close, @ticket
+        @ticket.close(@current_user)
+      end
+      redirect_to @ticket, notice: 'Comment saved.'
     else
-      redirect_to :back, error: 'There was an error while trying to save your comment.'
+      redirect_to @ticket, error: 'There was an error while trying to save your comment.'
     end
   end
 
@@ -40,6 +43,10 @@ class CommentsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def comment_params
     params.require(:comment).permit(:comment)
+  end
+
+  def close_ticket?
+    params[:commit] == 'comment_and_close'
   end
 
 end

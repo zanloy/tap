@@ -107,6 +107,8 @@
         = simple_form_for [@ticket, Comment.new] do |f|
           = f.input :comment, label: false
           = f.submit t('comment')
+          - if can? :close, @ticket
+            =< f.submit t('comment_and_close'), value: :comment_and_close
     hr
   .col-md-5
     hr

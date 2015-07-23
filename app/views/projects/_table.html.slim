@@ -1,18 +1,19 @@
 - for ticket in table
-  .row
-    .col-md-12
-      => image_tag("flag-#{ticket.flag_color}.png", width: 25)
-      = link_to ticket.title, ticket
-  .row
-    .col-md-12.text-right.text-muted
-      .i.glyphicon.glyphicon-user>
-      ' #{ticket.reporter.name_or_email}
-      .i.glyphicon.glyphicon-calendar>
-      ' #{ticket.created_at.strftime("%D")}
-      - if ticket.assignee
-        .i.glyphicon.glyphicon-wrench>
-        ' #{ticket.assignee.name_or_email}
-      - unless ticket.closed_by.nil?
-        .i.glyphicon.glyphicon-lock>
-        ' #{ticket.closed_by.name_or_email}
-  hr
+  .ticket_table_line
+    .row
+      .col-md-12
+        => image_tag("flag-#{ticket.flag_color}.png", width: 25)
+        = link_to ticket.title, ticket
+    .row
+      .col-md-12.text-right.text-muted
+        i.octicon.octicon-person>
+        ' #{ticket.reporter.name_or_email}
+        i.octicon.octicon-calendar>
+        ' #{ticket.created_at.strftime("%D")}
+        - if ticket.assignee
+          i.octicon.octicon-clippy>
+          ' #{ticket.assignee.name_or_email}
+        - unless ticket.closed_by.nil?
+          i.octicon.octicon-lock>
+          ' #{ticket.closed_by.name_or_email}
+    hr

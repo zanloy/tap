@@ -46,14 +46,6 @@
   line-height: 1.33;
 }
 
-/*
-.actions {
-  .glyphicon {
-    padding-right: 10px;
-  }
-}
-*/
-
 span.tag {
   /* display: inline; */
   margin-right: 3px;
@@ -102,5 +94,11 @@ form.button_to {
     padding: 5px 15px;;
     margin: 0px auto;
     text-align: center;
+  }
+}
+
+.ticket_table_line {
+  i {
+    margin-left: 10px;
   }
 }
