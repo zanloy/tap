@@ -32,7 +32,7 @@ class Ability
     # Public things.
     can :read, User, id: user.id
     can [:read, :closed], Project, private: false
-    can [:new, :create, :read], Ticket
+    can [:new, :create, :read, :subscribe, :unsubscribe], Ticket
 
     # Admin stuff.
     if user.role? :manager

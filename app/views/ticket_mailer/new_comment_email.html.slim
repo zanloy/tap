@@ -1,0 +1,7 @@
+p At #{@comment.updated_at.strftime('%D %I:%M%P')}, #{@comment.user.name} said the following:
+
+p = simple_format(@comment.comment)
+
+p Here are the ticket details:
+
+= render 'details'

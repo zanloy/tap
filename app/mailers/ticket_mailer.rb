@@ -31,4 +31,10 @@ class TicketMailer < ApplicationMailer
     mail(to: 'finance@sparcedge.com', subject: "Ticket ##{@ticket.id} has been approved for purchase.")
   end
 
+  def new_comment_email(email, comment)
+    @ticket = comment.ticket
+    @comment = comment
+    mail(to: email, subject: "#{@comment.user.name} commented on ticket ##{@ticket.id}.")
+  end
+
 end

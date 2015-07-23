@@ -21,9 +21,9 @@ RSpec.feature 'User Tasks', type: :feature do
       select 'normal', from: 'ticket_priority'
       fill_in 'ticket_description', with: 'Ticket description.'
       click_on 'Create'
-      assert has_content? 'success'
       assert has_content? 'This is my user ticket.'
       assert has_content? 'Ticket description.'
+      expect(page).to have_content('Unassigned')
     end
 
     #scenario 'creates new ticket with purchases' do

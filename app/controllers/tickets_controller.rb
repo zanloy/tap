@@ -16,6 +16,7 @@ class TicketsController < ApplicationController
   def show
     @purchases = @ticket.purchases
     @comments = @ticket.comments
+    @subscribed = Subscription.where(user: @current_user, ticket: @ticket).count > 0 ? true : false
   end
 
   # GET /tickets/new
@@ -35,7 +36,12 @@ class TicketsController < ApplicationController
 
     respond_to do |format|
       if @ticket.save
-        format.html { redirect_to @ticket, notice: 'Ticket was successfully created.' }
+        # User should auto-subscribe to tickets they create
+        begin
+          Subscription.create(user: @current_user, ticket: @ticket).save!
+        rescue
+        end
+        format.html { redirect_to @ticket }
         format.json { render :show, status: :created, location: @ticket }
       else
         logger.debug @ticket.errors.inspect
@@ -50,7 +56,7 @@ class TicketsController < ApplicationController
   def update
     respond_to do |format|
       if @ticket.update(ticket_params)
-        format.html { redirect_to @ticket, notice: 'Ticket was successfully updated.' }
+        format.html { redirect_to @ticket, notice: 'Ticket updated.' }
         format.json { render :show, status: :ok, location: @ticket }
       else
         format.html { render :edit }
@@ -62,7 +68,7 @@ class TicketsController < ApplicationController
   def self_assign
     respond_to do |format|
       if @ticket.assign_to(@current_user)
-        format.html { redirect_to @ticket, notice: 'You have been assigned this ticket.' }
+        format.html { redirect_to @ticket }
         format.json { render :show, status: :ok, location: @ticket }
       else
         format.html { redirect_to @ticket, alert: 'Failed to assign ticket.' }
@@ -76,7 +82,7 @@ class TicketsController < ApplicationController
   def destroy
     @ticket.destroy
     respond_to do |format|
-      format.html { redirect_to project_path(@ticket.project), notice: 'Ticket was deleted.' }
+      format.html { redirect_to @ticket.project, notice: 'Ticket deleted.' }
       format.json { head :no_content }
     end
   end
@@ -99,7 +105,7 @@ class TicketsController < ApplicationController
   def reopen
     respond_to do |format|
       if @ticket.reopen
-        format.html { redirect_to @ticket, notice: 'Ticket has been reopened.' }
+        format.html { redirect_to @ticket }
       else
         alert_text = @ticket.errors.messages.map { |k,v| v }.flatten.join(' ')
         format.html { redirect_to @ticket, alert: alert_text }
@@ -115,6 +121,28 @@ class TicketsController < ApplicationController
         @ticket.manager_approve(@current_user) if can? :manager_approve, @ticket and @ticket.approving_manager.nil?
         @ticket.executive_approve(@current_user) if can? :executive_approve, @ticket and @ticket.approving_executive.nil?
         format.html { redirect_to ticket_path(@ticket), notice: 'Ticket approved.' }
+    end
+  end
+
+  def subscribe
+    respond_to do |format|
+      if Subscription.where(user: @current_user, ticket: @ticket).count > 0
+        format.html { redirect_to @ticket, notice: 'You were already subscribed to this ticket.' }
+      else
+        subscription = Subscription.create(user: @current_user, ticket: @ticket)
+        if subscription.save
+          format.html { redirect_to @ticket }
+        else
+          format.html { redirect_to @ticket, alert: 'Subscription failed to save.' }
+        end
+      end
+    end
+  end
+
+  def unsubscribe
+    respond_to do |format|
+      Subscription.where(user: @current_user, ticket: @ticket).destroy_all
+      format.html { redirect_to @ticket }
     end
   end
 

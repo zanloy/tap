@@ -108,7 +108,7 @@
           = f.input :comment, label: false
           = f.submit t('comment')
           - if can? :close, @ticket
-            =< f.submit t('comment_and_close'), value: :comment_and_close
+            =< f.submit t('comment_and_close')
     hr
   .col-md-5
     hr
@@ -136,6 +136,22 @@
       .row
         .col-md-11.col-md-offset-1
           = @ticket.closed_by.name
+    .row
+      .col-md-12.text-muted
+        strong #{t('watchers')}:
+    .row
+      .col-md-11.col-md-offset-1
+        = @ticket.subscriptions_count
+    .row
+      .col-md-12
+        - if @subscribed
+          = link_to ticket_unsubscribe_path(@ticket), class: 'btn btn-default btn-sm' do
+            i.octicon.octicon-mute
+            = t('unsubscribe')
+        - else
+          = link_to ticket_subscribe_path(@ticket), class: 'btn btn-default btn-sm' do
+            i.octicon.octicon-eye
+            = t('subscribe')
     hr
     h4
       i.octicon.octicon-calendar>

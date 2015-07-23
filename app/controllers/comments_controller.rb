@@ -11,7 +11,11 @@ class CommentsController < ApplicationController
       if close_ticket? and can? :close, @ticket
         @ticket.close(@current_user)
       end
-      redirect_to @ticket, notice: 'Comment saved.'
+      @ticket.subscriptions.each do |subscription|
+        TicketMailer.new_comment_email(subscription.user.email, comment).deliver_later
+        puts "subscription.user.email = #{subscription.user.email}"
+      end
+      redirect_to @ticket
     else
       redirect_to @ticket, error: 'There was an error while trying to save your comment.'
     end
@@ -46,7 +50,7 @@ class CommentsController < ApplicationController
   end
 
   def close_ticket?
-    params[:commit] == 'comment_and_close'
+    params[:commit] == t('comment_and_close')
   end
 
 end

@@ -70,10 +70,13 @@ en:
     'true': 'Yes'
     'yes': 'Yes'
   state: State
+  subscribe: Subscribe
   tap_projects: TaP Projects
   total: Total
+  unsubscribe: Unsubscribe
   updated_at: Updated at
   view_all: View All
+  watchers: Watchers
   will_paginate:
     next_label: Next
     previous_label: Previous
