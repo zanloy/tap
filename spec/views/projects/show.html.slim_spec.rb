@@ -2,19 +2,14 @@ require 'rails_helper'
 
 RSpec.describe 'projects/show', type: :view do
   before do
-    controller.singleton_class.class_eval do
-      protected
-      def will_paginate(items)
-        nil
-      end
-      helper_method :will_paginate
-    end
-  end
-
-  before(:each) do
     # setup cancan ability
     @ability = Object.new.extend(CanCan::Ability)
     allow(controller).to receive(:current_ability).and_return(@ability)
+    allow(view).to receive_messages(:page_entries_info => nil)
+    allow(view).to receive_messages(:will_paginate => nil)
+  end
+
+  before(:each) do
     # setup expected variables
     @project = assign(:project, create(:project))
     @open_tickets = assign(:open_tickets, create_pair(:ticket, project: @project))

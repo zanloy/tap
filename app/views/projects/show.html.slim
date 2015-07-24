@@ -10,32 +10,35 @@ h1
         = t('delete_project')
   = @project.name
 
-ul.nav.nav-tabs
-  li.active = link_to t('open_tickets'), '#open', data: { toggle: 'tab' }
-  - unless @awaiting_manager.empty?
-    li = link_to 'Awaiting Manager Approval', '#awaiting_manager', data: { toggle: 'tab' }
-  - unless @awaiting_executive.empty?
-    li = link_to 'Awaiting Executive Approval', '#awaiting_executive', data: { toggle: 'tab' }
-  li = link_to t('closed_tickets'), '#closed', data: { toggle: 'tab' }
-  li = link_to '#members', data: { toggle: 'tab' } do
-    i.octicon.octicon-organization>
-    = t('members')
-br
-
-.tab-content
-  .tab-pane.fade.in.active id='open'
-    = render partial: 'table', object: @open_tickets
-    .text-center = will_paginate @open_tickets
-  - unless @awaiting_manager.empty?
-    .tab-pane.fade.in id='awaiting_manager'
-      = render partial: 'table', object: @awaiting_manager
-  - unless @awaiting_executive.empty?
-    .tab-pane.fade.in id='awaiting_executive'
-      = render partial: 'table', object: @awaiting_executive
-  .tab-pane.fade.in id='closed'
-    = render partial: 'table', object: @closed_tickets
-    .text-center = link_to t('view_all'), project_closed_path(@project)
-  .tab-pane.fade.in id='members'
-    - for membership in @memberships
-      .row
-        .col-md-12 #{membership.user.name} (#{membership.role_name})
+.row
+  .col-md-2
+    ul.nav.nav-stacked
+      li.active = link_to t('open_tickets'), '#open', data: { toggle: 'tab' }
+      - unless @awaiting_manager.empty?
+        li = link_to 'Awaiting Manager Approval', '#awaiting_manager', data: { toggle: 'tab' }
+      - unless @awaiting_executive.empty?
+        li = link_to 'Awaiting Executive Approval', '#awaiting_executive', data: { toggle: 'tab' }
+      li = link_to t('closed_tickets'), '#closed', data: { toggle: 'tab' }
+      li = link_to '#members', data: { toggle: 'tab' } do
+        i.octicon.octicon-organization>
+        = t('members')
+    br
+  .col-md-10
+    .tab-content
+      .tab-pane.fade.in.active id='open'
+        = render partial: 'table', object: @open_tickets
+        .text-center = page_entries_info @open_tickets
+        .text-center = will_paginate @open_tickets
+      - unless @awaiting_manager.empty?
+        .tab-pane.fade.in id='awaiting_manager'
+          = render partial: 'table', object: @awaiting_manager
+      - unless @awaiting_executive.empty?
+        .tab-pane.fade.in id='awaiting_executive'
+          = render partial: 'table', object: @awaiting_executive
+      .tab-pane.fade.in id='closed'
+        = render partial: 'table', object: @closed_tickets
+        .text-center = link_to t('view_all'), project_closed_path(@project)
+      .tab-pane.fade.in id='members'
+        - for membership in @memberships
+          .row
+            .col-md-12 #{membership.user.name} (#{membership.role_name})
