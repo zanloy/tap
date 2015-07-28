@@ -73,6 +73,8 @@ group :development do
   gem 'capistrano-rails'
   gem 'capistrano-rbenv'
   #gem 'capistrano-file-permissions'
+  # Use coveralls for code coverage testing
+  gem 'coveralls', require: false
   # Use guard for continous testing
   gem 'guard-rspec'
   gem 'pry-rails'
