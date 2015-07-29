@@ -1,4 +1,6 @@
 language: 'ruby'
+env:
+  - EMAIL_ADDRESS=tap@sparcedge.com
 rvm:
   - '2.1.4'
 script:
@@ -6,4 +8,3 @@ script:
 before_script:
   - mysql -e 'create database tap_test'
   - psql -c 'create database tap_test' -U postgres
-
