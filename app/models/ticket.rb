@@ -116,6 +116,10 @@ class Ticket < ActiveRecord::Base
       transition :closed => :unassigned
     end
 
+    event :archive do
+      transition :closed => :archived
+    end
+
     # States
     state :unassigned
     state :assigned
@@ -136,15 +140,6 @@ class Ticket < ActiveRecord::Base
 
   def executive_approved?
     approving_executive ? true : false
-  end
-
-  def disapprove
-    approving_manager = nil
-    manager_approved_at = nil
-    approving_executive = nil
-    executive_approved_at = nil
-    locked = false
-    closed = false
   end
 
   def has_purchases?

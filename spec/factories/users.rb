@@ -15,6 +15,10 @@ FactoryGirl.define do
     trait :admin do
       role 2
     end
+
+    trait :executive do
+      executive true
+    end
   end
 
 end
