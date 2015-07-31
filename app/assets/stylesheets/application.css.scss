@@ -23,6 +23,10 @@
 @import "octicons/octicons/sprockets-octicons";
 @import "*";
 
+body.container {
+  margin-top: 50px !important;
+}
+
 .breadcrumb {
   margin-bottom: 20px;
 }
