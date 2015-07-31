@@ -9,7 +9,7 @@ RSpec.describe "users/show.html.slim", type: :view do
   end
 
   it 'shows the user name' do
-    expect(rendered).to match(@user.name)
+    expect(rendered).to match(@user.name.html_safe)
   end
 
   it 'shows the user email' do
