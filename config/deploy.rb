@@ -39,7 +39,7 @@ set :deploy_to, '/srv/rails/tap'
 set :rbenv_ruby, File.read('.ruby-version').strip
 set :rbenv_map_bins, %w{rake gem bundle ruby rails}
 
-set :linked_dirs, %w{pids log sockets}
+set :linked_dirs, fetch(:linked_dirs, []).push('pids', 'log', 'sockets', 'public/system')
 set :linked_files, %w{.env}
 
 # Fix permissions
