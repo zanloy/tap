@@ -1,0 +1,5 @@
+.row
+  .col-md-3.text-right
+    => image_tag "mimetypes/#{attachment.file_content_type.sub('/', '-')}.svg", width: '32', height: '32'
+  .col-md-9.vertical-center
+    = link_to attachment.file_file_name, attachment.file.url(:original, false), target: '_blank'

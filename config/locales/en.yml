@@ -11,10 +11,12 @@ en:
             awaiting_manager: Awaiting Manager Approval
             closed: Closed
             unassigned: Unassigned
+  add_attachment: Add Attachment
   add_new_project: Add New Project
   add_purchase_item: Add Purchase Item
   approvals: Approvals
   assigned_to: Assigned To
+  attachments: Attachments
   closed_at: Closed at
   closed_by: Closed by
   closed_tickets: Closed Tickets

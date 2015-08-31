@@ -12,10 +12,12 @@ class Ticket < ActiveRecord::Base
   belongs_to :closed_by, class_name: User
   belongs_to :approving_manager, class_name: User
   belongs_to :approving_executive, class_name: User
-  has_many :purchases, dependent: :delete_all
-  has_many :comments, dependent: :delete_all
-  has_many :subscriptions, dependent: :delete_all
+  has_many :attachments, dependent: :destroy
+  has_many :comments, dependent: :destroy
+  has_many :purchases, dependent: :destroy
+  has_many :subscriptions, dependent: :destroy
 
+  accepts_nested_attributes_for :attachments, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :purchases, reject_if: :all_blank, allow_destroy: true
 
   # Validation
@@ -142,8 +144,12 @@ class Ticket < ActiveRecord::Base
     approving_executive ? true : false
   end
 
+  def has_attachments?
+    attachments_count > 0
+  end
+
   def has_purchases?
-    purchases_count > 0 ? true : false
+    purchases_count > 0
   end
 
   def total_items

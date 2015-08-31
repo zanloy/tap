@@ -26,3 +26,9 @@
 !/pids/.keep
 /sockets/*
 !/sockets/.keep
+
+# We do not need to track the following
+# code coverage
+/coverage
+# attachment files
+/public/system

@@ -60,8 +60,16 @@
         strong #{t('description')}:
       .col-md-9
         = simple_format(@ticket.description)
-    hr
+    - if @ticket.has_attachments?
+      #attachments
+        hr
+        h4
+          i.octicon-octicon-pencil>
+          = t('attachments')
+        hr
+        = render partial: 'attachment', collection: @ticket.attachments
     - if @ticket.has_purchases?
+      hr
       h4
         i.octicon.octicon-credit-card>
         ' #{t('purchases')} (#{number_to_currency(@ticket.total_cost)})
@@ -87,6 +95,7 @@
                 td = number_to_currency(purchase.cost)
                 td = number_to_currency(purchase.total)
       hr
+    hr
     h4
       i.octicon.octicon-comment-discussion>
       = t('comments')

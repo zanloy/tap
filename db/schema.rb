@@ -11,10 +11,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150723162829) do
+ActiveRecord::Schema.define(version: 20150831133343) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "attachments", force: :cascade do |t|
+    t.integer  "ticket_id"
+    t.string   "name"
+    t.string   "file_file_name"
+    t.string   "file_content_type"
+    t.integer  "file_file_size"
+    t.datetime "file_updated_at"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  add_index "attachments", ["ticket_id"], name: "index_attachments_on_ticket_id", using: :btree
 
   create_table "comments", force: :cascade do |t|
     t.integer  "ticket_id"
@@ -108,6 +121,7 @@ ActiveRecord::Schema.define(version: 20150723162829) do
     t.datetime "created_at",                                    null: false
     t.datetime "updated_at",                                    null: false
     t.integer  "subscriptions_count",    default: 0
+    t.integer  "attachments_count",      default: 0
   end
 
   add_index "tickets", ["assignee_id"], name: "index_tickets_on_assignee_id", using: :btree
@@ -128,6 +142,7 @@ ActiveRecord::Schema.define(version: 20150723162829) do
     t.datetime "updated_at",                       null: false
   end
 
+  add_foreign_key "attachments", "tickets"
   add_foreign_key "comments", "tickets"
   add_foreign_key "comments", "users"
   add_foreign_key "memberships", "projects"

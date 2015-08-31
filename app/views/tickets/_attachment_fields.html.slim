@@ -1,0 +1,10 @@
+.nested-fields
+  .row
+    .col-md-12
+      - if f.object.file.exists? and f.object.valid?
+        = link_to_remove_association f, class: 'btn btn-default btn-xs' do
+          i.glyphicon.glyphicon-remove
+        = f.object.file_file_name
+      - else
+        = f.input_field :file, as: :file
+br

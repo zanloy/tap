@@ -11,10 +11,12 @@ es:
             awaiting_manager: Esperando en la aprobación
             closed: Cerrado
             unassigned: No asignado
+  add_attachment: Añadir un adjunto
   add_new_project: Agregar un Proyecto Nuevo
   add_purchase_item: Añadir Compra
   approvals: Homologaciones
   assigned_to: Cesionario
+  attachments: Adjuntos
   closed_at: Cerrado en
   closed_by: Cerrado por
   closed_tickets: Boletos Cerradas

@@ -167,6 +167,6 @@ class TicketsController < ApplicationController
   end
 
   def ticket_params
-    params.require(:ticket).permit(:priority, :title, :description, :assignee_id, purchases_attributes: [:id, :name, :url, :quantity, :cost, :_destroy])
+    params.require(:ticket).permit(:priority, :title, :description, :assignee_id, attachments_attributes: [:id, :name, :file, :_destroy], purchases_attributes: [:id, :name, :url, :quantity, :cost, :_destroy])
   end
 end

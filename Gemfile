@@ -62,6 +62,8 @@ gem 'sweet-alert-confirm'
 gem 'rails-jquery-autocomplete'
 # Use state_machine for state
 gem 'state_machine'
+# Use Paperclip for file attachments
+gem 'paperclip', '~> 4.3'
 
 group :production do
   gem 'mailgun_rails'
