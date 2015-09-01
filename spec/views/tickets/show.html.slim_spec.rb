@@ -22,7 +22,7 @@ RSpec.describe "tickets/show", type: :view do
     expect(rendered).to match(@ticket.human_state_name)
     expect(rendered).to match(@ticket.priority_name)
     expect(rendered).to match(@ticket.description)
-    expect(rendered).to match(@ticket.reporter.name)
+    expect(rendered).to match(@ticket.reporter.name.html_safe)
   end
 
   it 'renderes comments' do
