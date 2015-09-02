@@ -93,7 +93,7 @@ class Ticket < ActiveRecord::Base
     end
 
     event :assign_to do
-      transition any => :assigned
+      transition [:unassigned, :assigned] => :assigned
     end
 
     event :request_manager_approval do
