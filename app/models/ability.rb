@@ -66,6 +66,7 @@ class Ability
       end
       if membership.role? :manager
         can :manage, Project, id: membership.project.id
+        can [:update, :edit, :moderate, :close, :destroy], Ticket, project: membership.project, state_name: :awaiting_executive
         can [:approve,:manager_approve], Ticket, project: membership.project, state_name: :awaiting_manager
       end
     end
