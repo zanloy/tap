@@ -1,6 +1,6 @@
-zan = User.first
-it_support = Project.find_by_name('IT Support')
-facilities = Project.find_by_name('Facilities')
+zan = User.first_by(email: 'zan.loy@sparcedge.com')
+it_support = Project.find_by(name: 'IT Support')
+facilities = Project.find_by(name: 'Facilities')
 
 # Create dummy worker user for tests
 worker = User.create(name: 'Johnny Worker', email: 'worker@sparcedge.com')

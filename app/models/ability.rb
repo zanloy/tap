@@ -47,7 +47,7 @@ class Ability
     end
 
     # User's can control their own destiny!
-    can [:edit, :update, :close], Ticket, reporter: user, state_name: [:unassigned, :assigned]
+    can [:edit, :update, :close], Ticket, reporter: user, state_name: [:unassigned, :assigned, :awaiting_manager]
     can :reopen, Ticket, reporter: user, closed_by: user, state_name: :closed
     can :destroy, Comment, user: user
 
