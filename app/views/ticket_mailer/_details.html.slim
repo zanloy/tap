@@ -41,6 +41,7 @@ p
           td = purchase.quantity
           td = number_to_currency(purchase.cost)
           td = number_to_currency(purchase.total)
+  p This ticket has #{@ticket.total_items} purchase items totaling #{number_to_currency(@ticket.total_cost)}.
   - if @ticket.approving_manager
     p
       strong> Approving Manager:
