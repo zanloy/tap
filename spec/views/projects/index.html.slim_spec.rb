@@ -10,7 +10,7 @@ RSpec.describe 'projects/index', type: :view do
 
   it 'renders a list of projects' do
     @projects.each do |project|
-      expect(rendered).to match(project.name)
+      expect(rendered).to match(CGI::escapeHTML(project.name))
     end
   end
 end
